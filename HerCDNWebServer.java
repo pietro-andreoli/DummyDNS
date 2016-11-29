@@ -4,29 +4,43 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Date;
 
-public class HerCDNWebServer implements Runnable{
+public class HerCDNWebServer implements Runnable
+{
 	ServerSocket my_sock ;
-	public HerCDNWebServer(InetAddress addr, int port) throws Exception{
+	
+	public HerCDNWebServer(InetAddress addr, int port) throws Exception
+	{
 		my_sock= new ServerSocket(90, 100, addr);
 	}
 	@Override
-	public void run() {
-		try{
-			try{
-				while(true){
+	public void run() 
+	{
+		try
+		{
+			try
+			{
+				while(true)
+				{
 					Socket client = this.my_sock.accept();
 					
-					try{
+					try
+					{
 						PrintWriter pw = new PrintWriter(client.getOutputStream(), true);
 						pw.println(new Date().toString());
-					}finally{
+					}
+					finally
+					{
 						client.close();
 					}
 				}
-			}finally{
+			}
+			finally
+			{
 				my_sock.close();
 			}
-		}catch(Exception e){
+		}
+		catch(Exception e)
+		{
 			
 		}
 		
