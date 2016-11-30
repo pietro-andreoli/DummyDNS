@@ -27,7 +27,7 @@ public class Main{
 		HerCDNWebServer her_server = new HerCDNWebServer(InetAddress.getByName("localhost"),40430 );
 		//her_server.run();
 		//HisCinemaWebServer his_server = new HisCinemaWebServer(ip_list[0],90 );
-		HisCinemaWebServer his_server = new HisCinemaWebServer(InetAddress.getByName("localhost"),49664 );
+		HisCinemaWebServer his_server = new HisCinemaWebServer(InetAddress.getByName("localhost"),40430 );
 		his_server.run();
 		//ServerSocket his_cinema1 = new ServerSocket(40430, 100, ip_list[0]);
 		//ServerSocket his_cinema2 = new ServerSocket(40431, 100, ip_list[0]);

@@ -9,17 +9,14 @@ public class ClientTest {
 	public static void main (String[] args) throws Exception{
 		Socket listener = new Socket(InetAddress.getByName("localhost"), 90);
 		int x = 1;
-		while(x == 1){
 			
 			try{
-				int client_num = 0;
-				
-			
 				PrintWriter pw = new PrintWriter(listener.getOutputStream());
-				pw.println("GET / HTTP/1.1");
-				pw.println("Host: localhost");
+				pw.println("GET:index.txt");
+				//pw.println("Host: localhost");
+				//pw.println("");
 				pw.flush();
-				pw.close();
+				
 				BufferedReader reader = new BufferedReader(new InputStreamReader(listener.getInputStream()));
 				String line = reader.readLine();
 				while(line != null){
@@ -27,13 +24,15 @@ public class ClientTest {
 						line = reader.readLine();
 				}
 				reader.close();
+				pw.close();
 			}finally{
 				//x=0;
+				System.out.println("doot");
+				listener.close();
 				
 			}
-		}
-		System.out.println("doot");
-		listener.close();
+		
+		
 	}
 
 }

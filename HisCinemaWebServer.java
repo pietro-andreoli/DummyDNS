@@ -9,7 +9,7 @@ import java.util.Date;
 public class HisCinemaWebServer implements Runnable {
 	ServerSocket my_sock ;
 	public HisCinemaWebServer(InetAddress addr, int port) throws Exception{
-		my_sock= new ServerSocket(90, 100, addr);
+		my_sock= new ServerSocket(port, 100, addr);
 	}
 	@Override
 	public void run() {
@@ -22,11 +22,17 @@ public class HisCinemaWebServer implements Runnable {
 						//pw.println(new Date().toString());
 						BufferedReader reader = new BufferedReader(new InputStreamReader(client.getInputStream()));
 						String line = reader.readLine();
+						String recieved_message = "";
 						while(line != null){
-							System.out.println(line);
+							//System.out.println(line);
+							recieved_message+=line;
 							line = reader.readLine();
 						}
-						//reader.close();
+						System.out.println(recieved_message);
+						if("index.txt".equals(recieved_message.split(":")[1])){
+							System.out.println("ayylmao");
+						}
+						reader.close();
 					}finally{
 						client.close();
 					}
