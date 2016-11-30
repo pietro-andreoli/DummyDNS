@@ -25,9 +25,10 @@ public class HisCinemaWebServer implements Runnable {
 						while(line != null){
 							System.out.println(line);
 							line = reader.readLine();
-					}
+						}
+						//reader.close();
 					}finally{
-						//client.close();
+						client.close();
 					}
 				}
 			}finally{
