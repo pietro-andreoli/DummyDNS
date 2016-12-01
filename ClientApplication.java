@@ -53,10 +53,10 @@ public class ClientApplication
 	
 	public static void connectToHisCinema() throws UnknownHostException, IOException{
 		
-		Socket sendSocket = new Socket(InetAddress.getByName("localhost"), 40435);
+		Socket sendSocket = new Socket(InetAddress.getByName("localhost"), 40437);
 		int x = 1;
-			
-			
+		
+		
 		PrintWriter pw = new PrintWriter(sendSocket.getOutputStream());
 		pw.print("GET /index.html HTTP/1.1\r\n");
 		pw.print("Host: www.hiscinema.com\r\n");
