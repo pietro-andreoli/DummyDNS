@@ -1,16 +1,11 @@
-
 import java.io.*;
 import java.net.*;
 import java.util.Date;
 import java.util.Scanner;
 
-import javax.swing.JFrame;
-
-
-//The Main class will function as the Client Application node
+//This will function as the Main class for this project
 public class ClientApplication
 {
-	//40430
 	public static void main(String[] args) throws Exception
 	{
 		InetAddress[] ip_list = new InetAddress[4];
@@ -27,9 +22,13 @@ public class ClientApplication
 		
 		ip_get.close();
 		
-		Socket clientToHisCinemaTCP = new Socket(InetAddress.getByName("localhost"), 40430);
-		Socket clientToHerContentTCP = new Socket(InetAddress.getByName("localhost"), 40431);
+		//Creating the network sockets for the Client Application
+		ServerSocket clientToHisCinemaTCP = new ServerSocket(40430, 10, InetAddress.getByName("localhost"));
+		ServerSocket clientToHerContentTCP = new ServerSocket(40431, 10, InetAddress.getByName("localhost"));
 		DatagramSocket clientToLocalDomainUDP = new DatagramSocket(40432, InetAddress.getByName("localhost"));
+		
+		//Creating the network socket for the Local DNS
+		
 		
 		
 		/*
