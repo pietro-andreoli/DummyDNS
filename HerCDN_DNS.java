@@ -2,11 +2,11 @@ import java.net.*;
 
 public class HerCDN_DNS implements Runnable
 {
-	private ServerSocket herContentDomainSocket;
+	private DatagramSocket herContentDomainSocket;
 	
 	public HerCDN_DNS(InetAddress addr, int port) throws Exception
 	{
-		herContentDomainSocket= new ServerSocket(port, 100, addr);
+		herContentDomainSocket= new DatagramSocket(port,addr);
 	}
 	
 	@Override

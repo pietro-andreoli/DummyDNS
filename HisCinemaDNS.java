@@ -2,11 +2,11 @@ import java.net.*;
 
 public class HisCinemaDNS implements Runnable
 {
-	private ServerSocket hisCinemaDomainSocket;
+	private DatagramSocket hisCinemaDomainSocket;
 	
 	public HisCinemaDNS(InetAddress addr, int port) throws Exception
 	{
-		hisCinemaDomainSocket= new ServerSocket(port, 100, addr);
+		hisCinemaDomainSocket= new DatagramSocket(port,addr);
 	}
 	
 	@Override
