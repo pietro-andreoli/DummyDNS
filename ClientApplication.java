@@ -21,10 +21,6 @@ public class ClientApplication
 			ip_num++;
 		}
 		
-		ip_get.close();
-		
-		
-		
 		//Creating the network sockets for the Client Application
 		ServerSocket clientTCPSocket = new ServerSocket(40430, 10, InetAddress.getByName("localhost"));
 		DatagramSocket clientToLocalDomainUDP = new DatagramSocket(40431, InetAddress.getByName("localhost"));
@@ -41,10 +37,10 @@ public class ClientApplication
 		//Creating the network socket for hiscinema.com Web Server
 		HisCinemaWebServer hisCinemaWeb = new HisCinemaWebServer(InetAddress.getByName("localhost"), 40437);
 		
-		new Thread(hisCinemaWeb).start();
+		
 		//new Thread(new ConnectionHandler()).start();
 		//Creating the network socket for herCDN.com Web Server
-		HerCDNWebServer herCNDWeb = new HerCDNWebServer(InetAddress.getByName("localhost"), 40438);
+		HerCDNWebServer herCDNWeb = new HerCDNWebServer(InetAddress.getByName("localhost"), 40438);
 		
 		//Eventually all of the above should look something like these
 		/*
@@ -53,8 +49,27 @@ public class ClientApplication
 		DatagramSocket clientToLocalDomainUDP = new DatagramSocket(40432 , ip_list[0]);
 		*/
 		
+		new Thread(hisCinemaWeb).start();
 		connectToHisCinema();
-		hisCinemaWeb.run();
+		
+		Scanner getVideo = new Scanner(System.in);
+		
+		System.out.println("Please enter a number for the video you wish to request: Please choose a number between 1 and 5 inclusively");
+		
+		int clientRequest = getVideo.nextInt();
+		getVideo.close();
+
+		switch(clientRequest)
+		{
+		case 1: System.out.println("Client has chosen video 1"); break;
+		case 2: System.out.println("Client has chosen video 2"); break;
+		case 3: System.out.println("Client has chosen video 3"); break;
+		case 4: System.out.println("Client has chosen video 4"); break;
+		case 5: System.out.println("Client has chosen video 5"); break;
+			default: System.out.println("That is not a valid selection"); break;
+		}
+		
+		
 		
 
 	}
@@ -67,37 +82,24 @@ public class ClientApplication
 		
 		BufferedReader inFromServer = new BufferedReader(new InputStreamReader(sendSocket.getInputStream()));
 		
-		/*PrintWriter pw = new PrintWriter(sendSocket.getOutputStream());
-		pw.print("GET /index.html HTTP/1.1\r\n");
-		pw.print("Host: www.hiscinema.com\r\n");
-		pw.print("");
-		pw.flush();*/
-		
 		toServer.writeBytes("GET /index.html HTTP/1.1\r\nHost: www.hiscinema.com\r\nto IP: " + 
 				sendSocket.getInetAddress() + " on Port: " + sendSocket.getPort());
 		
-		String serverReply = ":(";
-		try{
-		serverReply = inFromServer.readLine();
-		serverReply = inFromServer.readLine();
-		indexContent += serverReply;
-		serverReply = inFromServer.readLine();
-		indexContent += serverReply;
-		//while(serverReply != null){
-		//	indexContent += serverReply;
-		//	serverReply = inFromServer.readLine();
-		//}
-	//	serverReply = inFromServer.readLine();
-	//	serverReply = inFromServer.readLine();
-		}catch(Exception e){
+		String serverReply = "";
+		
+		try
+		{
+			while(serverReply!=null)
+			{
+				System.out.println(serverReply);
+				serverReply = inFromServer.readLine();
+				indexContent+=serverReply;
+			}
+		}
+		catch(Exception e)
+		{
 			System.out.println("bad doot");
 		}
-		System.out.println(serverReply);
-		sendSocket.close();
-		
-			
-		
+		sendSocket.close();	
 	}
-
-	
 }

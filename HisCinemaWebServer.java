@@ -37,12 +37,13 @@ public class HisCinemaWebServer implements Runnable
 						
 						System.out.println(clientMessage);
 						
-						outToClient.writeBytes("Request received, sending index.txt to IP: " + client.getInetAddress() + " on Port: " + client.getPort());
+						outToClient.writeBytes("Request received, sending index.txt to IP: " + client.getInetAddress() + " on Port: " + client.getPort() + "\n");
 				
 						System.out.println("ayy2");
 						
 						
-						if(clientMessage.contains("GET /index.html")){
+						if(clientMessage.contains("GET /index.html"))
+						{
 							File index = new File(System.getProperty("user.dir")+"\\src\\index.txt");
 							byte[] fileByteArray = new byte[(int)index.length()];
 							FileInputStream fis = new FileInputStream(index);
