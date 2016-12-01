@@ -13,6 +13,7 @@ public class HisCinemaWebServer implements Runnable
 	@Override
 	public void run() 
 	{
+		System.out.println("Doot");
 		try
 		{
 			try
@@ -27,20 +28,27 @@ public class HisCinemaWebServer implements Runnable
 						BufferedReader reader = new BufferedReader(new InputStreamReader(client.getInputStream()));
 						String line = reader.readLine();
 						String recieved_message = "";
-						
 						while(line != null)
 						{
 							//System.out.println(line);
 							recieved_message+=line;
 							line = reader.readLine();
+							
+						}
+						if(recieved_message.contains("GET /index.html")){
+							File index = new File("index.txt");
+							byte[] fileByteArray = new byte[(int)index.length()];
+							FileInputStream fis = new FileInputStream(index);
+							BufferedInputStream bis = new BufferedInputStream(fis);
+							bis.read(fileByteArray, 0, fileByteArray.length);
+							OutputStream os = client.getOutputStream();
+							os.write(fileByteArray, 0, fileByteArray.length);
+							os.flush();
+							fis.close();
+							bis.close();
+							os.close();
 						}
 						
-						System.out.println(recieved_message);
-						
-						if("index.txt".equals(recieved_message.split(":")[1]))
-						{
-							System.out.println("ayylmao");
-						}
 						reader.close();
 					}
 					finally
