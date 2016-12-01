@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.Scanner;
 
 //This will function as the Main class for this project
-public class ClientApplication
+public class ClientApplication implements Runnable
 {
 	public static void main(String[] args) throws Exception
 	{
@@ -39,7 +39,7 @@ public class ClientApplication
 		
 		//Creating the network socket for hiscinema.com Web Server
 		HisCinemaWebServer hisCinemaWeb = new HisCinemaWebServer(InetAddress.getByName("localhost"), 40437);
-		
+		new Thread(hisCinemaWeb).start();
 		//Creating the network socket for herCDN.com Web Server
 		HerCDNWebServer herCNDWeb = new HerCDNWebServer(InetAddress.getByName("localhost"), 40438);
 		
@@ -51,7 +51,7 @@ public class ClientApplication
 		*/
 		
 		connectToHisCinema();
-		hisCinemaWeb.run();
+		//hisCinemaWeb.run();
 		
 
 	}
@@ -68,16 +68,23 @@ public class ClientApplication
 		pw.print("");
 		pw.flush();
 		
-		
+		if(sendSocket.isConnected()){
 			BufferedReader reader = new BufferedReader(new InputStreamReader(sendSocket.getInputStream()));
 			String line = "";
-			
-			while(line != null)
-			{
-					System.out.println(line);
-					line = reader.readLine();
-			}
+				while(reader.ready())
+				{
+						System.out.println(line);
+						line = reader.readLine();
+						x=2;
+				}
 			reader.close();
+		}
 			pw.close();
+	}
+
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		
 	}
 }

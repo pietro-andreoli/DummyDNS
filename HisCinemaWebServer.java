@@ -8,8 +8,10 @@ public class HisCinemaWebServer implements Runnable
 	
 	public HisCinemaWebServer(InetAddress addr, int port) throws Exception
 	{
-		hisCinemaWebSocket= new ServerSocket(port, 100, addr);
+		this.hisCinemaWebSocket= new ServerSocket(port, 100, addr);
+		
 	}
+	
 	@Override
 	public void run() 
 	{
@@ -23,6 +25,7 @@ public class HisCinemaWebServer implements Runnable
 					Socket client = this.hisCinemaWebSocket.accept();
 					try
 					{
+						System.out.println("ayy");
 						//PrintWriter pw = new PrintWriter(client.getOutputStream(), true);
 						//pw.println(new Date().toString());
 						BufferedReader reader = new BufferedReader(new InputStreamReader(client.getInputStream()));
@@ -35,8 +38,9 @@ public class HisCinemaWebServer implements Runnable
 							line = reader.readLine();
 							
 						}
+						System.out.println("ayy");
 						if(recieved_message.contains("GET /index.html")){
-							File index = new File("index.txt");
+							File index = new File(System.getProperty("user.dir")+"\\src\\index.txt");
 							byte[] fileByteArray = new byte[(int)index.length()];
 							FileInputStream fis = new FileInputStream(index);
 							BufferedInputStream bis = new BufferedInputStream(fis);
@@ -50,11 +54,13 @@ public class HisCinemaWebServer implements Runnable
 						}
 						
 						reader.close();
-					}
-					finally
+					}catch(Exception e){
+						System.out.println(e);
+					}finally
 					{
 						client.close();
 					}
+					
 				}
 			}
 			finally
