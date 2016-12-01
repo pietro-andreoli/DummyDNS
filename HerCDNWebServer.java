@@ -8,7 +8,7 @@ public class HerCDNWebServer implements Runnable
 	
 	public HerCDNWebServer(InetAddress addr, int port) throws Exception
 	{
-		herContentWebSocket= new ServerSocket(90, 100, addr);
+		herContentWebSocket= new ServerSocket(port, 100, addr);
 	}
 	
 	@Override
