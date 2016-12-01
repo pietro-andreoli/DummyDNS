@@ -27,8 +27,15 @@ public class ClientApplication
 		ServerSocket clientToHerContentTCP = new ServerSocket(40431, 10, InetAddress.getByName("localhost"));
 		DatagramSocket clientToLocalDomainUDP = new DatagramSocket(40432, InetAddress.getByName("localhost"));
 		
-		//Creating the network socket for the Local DNS
+		//Creating the network sockets for the Local DNS
 		
+		//Creating the network socket for hiscinema.com DNS
+		
+		//Creating the network socket for herCDN.com DNS
+		
+		//Creating the network socket for hiscinema.com Web Server
+		
+		//Creating the network socket for herCDN.com Web Server
 		
 		
 		/*

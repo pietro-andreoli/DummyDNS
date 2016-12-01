@@ -1,13 +1,17 @@
-import java.net.InetAddress;
-import java.net.ServerSocket;
+import java.net.*;
 
-public class HisCinemaDNS implements Runnable{
-	private ServerSocket my_sock;
-	public HisCinemaDNS(InetAddress addr, int port) throws Exception{
-		my_sock= new ServerSocket(port, 100, addr);
+public class HisCinemaDNS implements Runnable
+{
+	private ServerSocket hisCinemaDomainSocket;
+	
+	public HisCinemaDNS(InetAddress addr, int port) throws Exception
+	{
+		hisCinemaDomainSocket= new ServerSocket(port, 100, addr);
 	}
+	
 	@Override
-	public void run() {
+	public void run() 
+	{
 		// TODO Auto-generated method stub
 		
 	}
