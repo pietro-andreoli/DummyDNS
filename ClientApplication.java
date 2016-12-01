@@ -28,15 +28,19 @@ public class ClientApplication
 		DatagramSocket clientToLocalDomainUDP = new DatagramSocket(40432, InetAddress.getByName("localhost"));
 		
 		//Creating the network sockets for the Local DNS
+		ClientLocalDNS clientDNS = new ClientLocalDNS(InetAddress.getByName("localhost"), 40434, 40435, 40436);
 		
 		//Creating the network socket for hiscinema.com DNS
+		HisCinemaDNS hisCinemaDNS = new HisCinemaDNS(InetAddress.getByName("localhost"), 40437);
 		
 		//Creating the network socket for herCDN.com DNS
+		HerCDN_DNS herContentDomain = new HerCDN_DNS(InetAddress.getByName("localhost"), 40438);
 		
 		//Creating the network socket for hiscinema.com Web Server
+		HisCinemaWebServer hisCinemaWeb = new HisCinemaWebServer(InetAddress.getByName("localhost"), 40439);
 		
 		//Creating the network socket for herCDN.com Web Server
-		
+		HerCDNWebServer herCNDWeb = new HerCDNWebServer(InetAddress.getByName("localhost"), 40440);
 		
 		/*
 		Socket clientToHisCinemaTCP = new Socket(ip_list[0] , 40430);
@@ -49,12 +53,6 @@ public class ClientApplication
 		HerCDNWebServer her_server = new HerCDNWebServer(InetAddress.getByName("localhost"),40430 );
 		
 		HisCinemaWebServer his_server = new HisCinemaWebServer(InetAddress.getByName("localhost"),40430 );
-		his_server.run();
-		
-		
-		
-		
+		his_server.run();	
 	}
-
-
 }
