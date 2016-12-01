@@ -42,17 +42,12 @@ public class ClientApplication
 		//Creating the network socket for herCDN.com Web Server
 		HerCDNWebServer herCNDWeb = new HerCDNWebServer(InetAddress.getByName("localhost"), 40440);
 		
+		//Eventually all of the above should look something like these
 		/*
 		Socket clientToHisCinemaTCP = new Socket(ip_list[0] , 40430);
 		Socket clientToHerContentTCP = new Socket(ip_list[0] , 40431);
 		DatagramSocket clientToLocalDomainUDP = new DatagramSocket(40432 , ip_list[0]);
 		*/
-		
-		
-		//Not sure what's gonna happen to these lines
-		HerCDNWebServer her_server = new HerCDNWebServer(InetAddress.getByName("localhost"),40430 );
-		
-		HisCinemaWebServer his_server = new HisCinemaWebServer(InetAddress.getByName("localhost"),40430 );
-		his_server.run();	
+
 	}
 }
