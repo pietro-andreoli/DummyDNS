@@ -15,5 +15,4 @@ public class HisCinemaDNS implements Runnable
 		// TODO Auto-generated method stub
 		
 	}
-
 }

@@ -13,7 +13,5 @@ public class HerCDN_DNS implements Runnable
 	public void run() 
 	{
 		// TODO Auto-generated method stub
-		
 	}
-
 }

@@ -23,24 +23,23 @@ public class ClientApplication
 		ip_get.close();
 		
 		//Creating the network sockets for the Client Application
-		ServerSocket clientToHisCinemaTCP = new ServerSocket(40430, 10, InetAddress.getByName("localhost"));
-		ServerSocket clientToHerContentTCP = new ServerSocket(40431, 10, InetAddress.getByName("localhost"));
-		DatagramSocket clientToLocalDomainUDP = new DatagramSocket(40432, InetAddress.getByName("localhost"));
+		ServerSocket clientTCPSocket = new ServerSocket(40430, 10, InetAddress.getByName("localhost"));
+		DatagramSocket clientToLocalDomainUDP = new DatagramSocket(40431, InetAddress.getByName("localhost"));
 		
 		//Creating the network sockets for the Local DNS
-		ClientLocalDNS clientDNS = new ClientLocalDNS(InetAddress.getByName("localhost"), 40434, 40435, 40436);
+		ClientLocalDNS clientDNS = new ClientLocalDNS(InetAddress.getByName("localhost"), 40432, 40433, 40434);
 		
 		//Creating the network socket for hiscinema.com DNS
-		HisCinemaDNS hisCinemaDNS = new HisCinemaDNS(InetAddress.getByName("localhost"), 40437);
+		HisCinemaDNS hisCinemaDNS = new HisCinemaDNS(InetAddress.getByName("localhost"), 40435);
 		
 		//Creating the network socket for herCDN.com DNS
-		HerCDN_DNS herContentDomain = new HerCDN_DNS(InetAddress.getByName("localhost"), 40438);
+		HerCDN_DNS herContentDomain = new HerCDN_DNS(InetAddress.getByName("localhost"), 40436);
 		
 		//Creating the network socket for hiscinema.com Web Server
-		HisCinemaWebServer hisCinemaWeb = new HisCinemaWebServer(InetAddress.getByName("localhost"), 40439);
+		HisCinemaWebServer hisCinemaWeb = new HisCinemaWebServer(InetAddress.getByName("localhost"), 40437);
 		
 		//Creating the network socket for herCDN.com Web Server
-		HerCDNWebServer herCNDWeb = new HerCDNWebServer(InetAddress.getByName("localhost"), 40440);
+		HerCDNWebServer herCNDWeb = new HerCDNWebServer(InetAddress.getByName("localhost"), 40438);
 		
 		//Eventually all of the above should look something like these
 		/*
