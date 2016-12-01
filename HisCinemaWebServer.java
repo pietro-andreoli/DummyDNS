@@ -18,28 +18,31 @@ public class HisCinemaWebServer implements Runnable
 		System.out.println("Doot");
 		try
 		{
-			try
-			{
 				while(true)
 				{
 					Socket client = this.hisCinemaWebSocket.accept();
 					try
 					{
-						System.out.println("ayy");
+						System.out.println("ayy1");
+						
 						//PrintWriter pw = new PrintWriter(client.getOutputStream(), true);
 						//pw.println(new Date().toString());
-						BufferedReader reader = new BufferedReader(new InputStreamReader(client.getInputStream()));
-						String line = reader.readLine();
-						String recieved_message = "";
-						while(line != null)
-						{
-							//System.out.println(line);
-							recieved_message+=line;
-							line = reader.readLine();
-							
-						}
-						System.out.println("ayy");
-						if(recieved_message.contains("GET /index.html")){
+						
+						BufferedReader inFromClient = new BufferedReader(new InputStreamReader(client.getInputStream()));
+						
+						DataOutputStream outToClient = new DataOutputStream(client.getOutputStream());
+						
+						String clientMessage = inFromClient.readLine();
+						
+						
+						System.out.println(clientMessage);
+						
+						outToClient.writeBytes("Request received, sending index.txt to IP: " + client.getInetAddress() + " on Port: " + client.getPort());
+				
+						System.out.println("ayy2");
+						
+						
+						if(clientMessage.contains("GET /index.html")){
 							File index = new File(System.getProperty("user.dir")+"\\src\\index.txt");
 							byte[] fileByteArray = new byte[(int)index.length()];
 							FileInputStream fis = new FileInputStream(index);
@@ -47,26 +50,22 @@ public class HisCinemaWebServer implements Runnable
 							bis.read(fileByteArray, 0, fileByteArray.length);
 							OutputStream os = client.getOutputStream();
 							os.write(fileByteArray, 0, fileByteArray.length);
+							//System.out.println(fileByteArray.toString());
 							os.flush();
 							fis.close();
 							bis.close();
 							os.close();
 						}
-						
-						reader.close();
-					}catch(Exception e){
-						System.out.println(e);
-					}finally
-					{
-						client.close();
+						inFromClient.close();
+						outToClient.close();
 					}
+					catch(Exception e)
+					{
+						System.out.println(e);
+					}
+					client.close();
 					
 				}
-			}
-			finally
-			{
-				hisCinemaWebSocket.close();
-			}
 		}
 		catch(Exception e)
 		{

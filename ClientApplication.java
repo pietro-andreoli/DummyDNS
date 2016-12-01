@@ -4,8 +4,9 @@ import java.util.Date;
 import java.util.Scanner;
 
 //This will function as the Main class for this project
-public class ClientApplication implements Runnable
+public class ClientApplication
 {
+	static String indexContent = "";
 	public static void main(String[] args) throws Exception
 	{
 		InetAddress[] ip_list = new InetAddress[4];
@@ -39,7 +40,9 @@ public class ClientApplication implements Runnable
 		
 		//Creating the network socket for hiscinema.com Web Server
 		HisCinemaWebServer hisCinemaWeb = new HisCinemaWebServer(InetAddress.getByName("localhost"), 40437);
+		
 		new Thread(hisCinemaWeb).start();
+		//new Thread(new ConnectionHandler()).start();
 		//Creating the network socket for herCDN.com Web Server
 		HerCDNWebServer herCNDWeb = new HerCDNWebServer(InetAddress.getByName("localhost"), 40438);
 		
@@ -51,7 +54,7 @@ public class ClientApplication implements Runnable
 		*/
 		
 		connectToHisCinema();
-		//hisCinemaWeb.run();
+		hisCinemaWeb.run();
 		
 
 	}
@@ -59,32 +62,42 @@ public class ClientApplication implements Runnable
 	public static void connectToHisCinema() throws UnknownHostException, IOException
 	{
 		Socket sendSocket = new Socket(InetAddress.getByName("localhost"), 40437);
-		int x = 1;
 			
-			
-		PrintWriter pw = new PrintWriter(sendSocket.getOutputStream());
+		DataOutputStream toServer = new DataOutputStream(sendSocket.getOutputStream());	
+		
+		BufferedReader inFromServer = new BufferedReader(new InputStreamReader(sendSocket.getInputStream()));
+		
+		/*PrintWriter pw = new PrintWriter(sendSocket.getOutputStream());
 		pw.print("GET /index.html HTTP/1.1\r\n");
 		pw.print("Host: www.hiscinema.com\r\n");
 		pw.print("");
-		pw.flush();
+		pw.flush();*/
 		
-		if(sendSocket.isConnected()){
-			BufferedReader reader = new BufferedReader(new InputStreamReader(sendSocket.getInputStream()));
-			String line = "";
-				while(reader.ready())
-				{
-						System.out.println(line);
-						line = reader.readLine();
-						x=2;
-				}
-			reader.close();
+		toServer.writeBytes("GET /index.html HTTP/1.1\r\nHost: www.hiscinema.com\r\nto IP: " + 
+				sendSocket.getInetAddress() + " on Port: " + sendSocket.getPort());
+		
+		String serverReply = ":(";
+		try{
+		serverReply = inFromServer.readLine();
+		serverReply = inFromServer.readLine();
+		indexContent += serverReply;
+		serverReply = inFromServer.readLine();
+		indexContent += serverReply;
+		//while(serverReply != null){
+		//	indexContent += serverReply;
+		//	serverReply = inFromServer.readLine();
+		//}
+	//	serverReply = inFromServer.readLine();
+	//	serverReply = inFromServer.readLine();
+		}catch(Exception e){
+			System.out.println("bad doot");
 		}
-			pw.close();
+		System.out.println(serverReply);
+		sendSocket.close();
+		
+			
+		
 	}
 
-	@Override
-	public void run() {
-		// TODO Auto-generated method stub
-		
-	}
+	
 }
