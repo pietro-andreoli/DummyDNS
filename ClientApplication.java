@@ -82,8 +82,10 @@ public class ClientApplication
 		
 		BufferedReader inFromServer = new BufferedReader(new InputStreamReader(sendSocket.getInputStream()));
 		
-		toServer.writeBytes("GET /index.html HTTP/1.1\r\nHost: www.hiscinema.com\r\nto IP: " + 
-				sendSocket.getInetAddress() + " on Port: " + sendSocket.getPort());
+		InetAddress ip = sendSocket.getInetAddress();
+		int port = sendSocket.getPort();
+		
+		toServer.writeBytes("GET /index.html HTTP/1.1\r\n Host: www.hiscinema.com\r\n to IP: " + ip + "\r\n on Port: " + port + "\r\n");
 		
 		String serverReply = "";
 		

@@ -15,33 +15,34 @@ public class HisCinemaWebServer implements Runnable
 	@Override
 	public void run() 
 	{
-		System.out.println("Doot");
 		try
 		{
 				while(true)
 				{
 					Socket client = this.hisCinemaWebSocket.accept();
 					try
-					{
-						System.out.println("ayy1");
-						
-						//PrintWriter pw = new PrintWriter(client.getOutputStream(), true);
-						//pw.println(new Date().toString());
-						
+					{	
 						BufferedReader inFromClient = new BufferedReader(new InputStreamReader(client.getInputStream()));
 						
 						DataOutputStream outToClient = new DataOutputStream(client.getOutputStream());
 						
-						String clientMessage = inFromClient.readLine();
+						String clientMessage = "";
 						
-						
-						System.out.println(clientMessage);
+						try
+						{
+							while(clientMessage!=null)
+							{
+								System.out.println(clientMessage);
+								clientMessage = inFromClient.readLine();
+							}
+						}
+						catch(Exception e)
+						{
+							System.out.println("bad doot");
+						}
 						
 						outToClient.writeBytes("Request received, sending index.txt to IP: " + client.getInetAddress() + " on Port: " + client.getPort() + "\n");
-				
-						System.out.println("ayy2");
-						
-						
+					
 						if(clientMessage.contains("GET /index.html"))
 						{
 							File index = new File(System.getProperty("user.dir")+"\\src\\index.txt");
@@ -70,7 +71,7 @@ public class HisCinemaWebServer implements Runnable
 		}
 		catch(Exception e)
 		{
-			
+			System.out.println(e);
 		}
 	}
 }
