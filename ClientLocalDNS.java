@@ -21,58 +21,21 @@ public class ClientLocalDNS implements Runnable
 	{
 		try
 		{
-					byte[] recvBuff = new byte[1024];
-					DatagramPacket rcvPkt = new DatagramPacket(recvBuff, 1024);
+					byte[] receiveData = new byte[1024];
+					DatagramPacket rcvPkt = new DatagramPacket(receiveData, receiveData.length);
 					this.localDomainUDP.receive(rcvPkt);
 					try
 					{	
-						//BufferedReader inFromClient = new BufferedReader(new InputStreamReader(client.getInputStream()));
-						
-						//DataOutputStream outToClient = new DataOutputStream(client.getOutputStream());
-						
-						String clientMessage = "";
-						
-						try
+						byte[] data = rcvPkt.getData();
+						for(int i = 0; i < data.length; i++)
 						{
-							while(clientMessage!=null)
-							{
-								System.out.println(clientMessage);
-								clientMessage = new String(rcvPkt.getData(), 0, rcvPkt.getLength());
-							}
+							System.out.println(data[i]);
 						}
-						catch(Exception e)
-						{
-							System.out.println("bad doot");
-						}
-						
-						/*outToClient.writeBytes("Request received, sending index.txt to IP: " + client.getInetAddress() + " on Port: " + client.getPort() + "\n");
-						outToClient.flush();
-						if(clientMessage.contains("GET /index.html"))
-						{
-							File index = new File(System.getProperty("user.dir")+"\\src\\index.txt");
-							byte[] fileByteArray = new byte[(int)index.length()];
-							FileInputStream fis = new FileInputStream(index);
-							BufferedInputStream bis = new BufferedInputStream(fis);
-							bis.read(fileByteArray, 0, fileByteArray.length);
-							OutputStream os = client.getOutputStream();
-							os.write(fileByteArray, 0, fileByteArray.length);
-							//System.out.println(fileByteArray.toString());
-							os.flush();
-							fis.close();
-							bis.close();
-							os.close();
-						}
-						inFromClient.close();
-						outToClient.close();
-						*/
 					}
 					catch(Exception e)
 					{
 						System.out.println(e);
-					}
-					//client.close();
-					
-				
+					}		
 		}
 		catch(Exception e)
 		{

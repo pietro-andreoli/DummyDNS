@@ -70,19 +70,20 @@ public class ClientApplication
 		
 		new Thread(hisCinemaWeb).start();
 		ArrayList<String> fileContents = connectToHisCinema();
-		while(true){
-			
-			
+		while(true)
+		{
 			Scanner getVideo = new Scanner(System.in);
 			
 			System.out.println("Please enter a number for the video you wish to request: Please choose a number between 1 and "+fileContents.size()+"inclusively");
 			
 			int clientRequest = getVideo.nextInt();
 			getVideo.close();
-			if(!(clientRequest > fileContents.size()) && !(clientRequest < 1)){
+			if(!(clientRequest > fileContents.size()) && !(clientRequest < 1))
+			{
 				System.out.println("User Chose: "+ fileContents.get(clientRequest-1));
 				break;
 			}
+			
 			/*switch(clientRequest)
 			{
 			case 1: System.out.println("Client has chosen video 1"); queryLocalDNS("www.hiscinema.com/video1"); break;
@@ -95,6 +96,7 @@ public class ClientApplication
 		
 		}
 		
+		queryLocalDNS("www.hiscinema.com/video4");
 
 	}
 	
@@ -122,12 +124,14 @@ public class ClientApplication
 				serverReply = inFromServer.readLine();
 				System.out.println(serverReply);
 				indexContent+=serverReply;
-				if(serverReply.contains("Request received")){
+				if(serverReply.contains("Request received"))
+				{
 					ack = true;
 					break;
 				}
 			}
-			if(ack == true){
+			if(ack == true)
+			{
 				serverReply = "";
 				while(serverReply!=null)
 				{
@@ -137,7 +141,7 @@ public class ClientApplication
 					if(serverReply != null)
 						fileContents.add(serverReply);
 					indexContent+=serverReply;
-			}
+				}
 			}
 		}
 		catch(Exception e)
