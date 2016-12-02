@@ -70,13 +70,14 @@ public class ClientApplication
 		
 		new Thread(hisCinemaWeb).start();
 		ArrayList<String> fileContents = connectToHisCinema();
+		int clientRequest;
 		while(true)
 		{
 			Scanner getVideo = new Scanner(System.in);
 			
-			System.out.println("Please enter a number for the video you wish to request: Please choose a number between 1 and "+fileContents.size()+"inclusively");
+			System.out.println("Please enter a number for the video you wish to request: Please choose a number between 1 and "+fileContents.size()+" inclusively");
 			
-			int clientRequest = getVideo.nextInt();
+			clientRequest = getVideo.nextInt();
 			getVideo.close();
 			if(!(clientRequest > fileContents.size()) && !(clientRequest < 1))
 			{
@@ -96,7 +97,7 @@ public class ClientApplication
 		
 		}
 		
-		queryLocalDNS("www.hiscinema.com/video4");
+		queryLocalDNS(fileContents.get(clientRequest-1));
 
 	}
 	
@@ -156,7 +157,8 @@ public class ClientApplication
 	{
 		DatagramSocket toServerSocket = new DatagramSocket(40439,InetAddress.getByName("localhost"));
 		toServerSocket.connect(InetAddress.getByName("localhost"), 40432);
-		String msg = videoURL;
+		String msg = "(" + videoURL + ", dns.hiscinema.com, V, 86400) \n(hiscinema.com, " + toServerSocket.getInetAddress() + ", A)";
+		System.out.println("Querying DNS at IP address: " + toServerSocket.getInetAddress() + " on Port: " + toServerSocket.getPort());
 		DatagramPacket sndPkt = new DatagramPacket(msg.getBytes(), msg.length(), toServerSocket.getInetAddress(), toServerSocket.getPort());
 		
 		try
