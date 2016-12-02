@@ -19,6 +19,15 @@ public class ClientApplication
 	//Creating the network sockets for the Client Application
 	static ServerSocket clientTCPSocket;
 	static DatagramSocket clientToLocalDomainUDP;
+	static ClientLocalDNS clientDNS1;
+	static ClientLocalDNS clientDNS2;
+	static ClientLocalDNS clientDNS3;
+	static HisCinemaDNS hisCinemaDNS;
+	static HerCDN_DNS herContentDomain;
+	static HisCinemaWebServer hisCinemaWeb;
+	static HerCDNWebServer herCDNWeb;
+	
+	
 	public static void main(String[] args) throws Exception
 	{
 		InetAddress[] ip_list = new InetAddress[4];
@@ -38,28 +47,28 @@ public class ClientApplication
 		clientToLocalDomainUDP = new DatagramSocket(40431, InetAddress.getByName("localhost"));
 		
 		//Creating the network sockets for the Local DNS
-		ClientLocalDNS clientDNS1 = new ClientLocalDNS(InetAddress.getByName("localhost"), 40432);
+		clientDNS1 = new ClientLocalDNS(InetAddress.getByName("localhost"), 40432);
 		new Thread(clientDNS1).start();
 		
-		ClientLocalDNS clientDNS2 = new ClientLocalDNS(InetAddress.getByName("localhost"), 40433);
+		clientDNS2 = new ClientLocalDNS(InetAddress.getByName("localhost"), 40433);
 		new Thread(clientDNS2).start();
 		
-		ClientLocalDNS clientDNS3 = new ClientLocalDNS(InetAddress.getByName("localhost"), 40434);
+		clientDNS3 = new ClientLocalDNS(InetAddress.getByName("localhost"), 40434);
 		new Thread(clientDNS3).start();
 		
 		//Creating the network socket for hiscinema.com DNS
-		HisCinemaDNS hisCinemaDNS = new HisCinemaDNS(InetAddress.getByName("localhost"), 40435);
+		hisCinemaDNS = new HisCinemaDNS(InetAddress.getByName("localhost"), 40435);
 		
 		//Creating the network socket for herCDN.com DNS
-		HerCDN_DNS herContentDomain = new HerCDN_DNS(InetAddress.getByName("localhost"), 40436);
+		herContentDomain = new HerCDN_DNS(InetAddress.getByName("localhost"), 40436);
 		
 		//Creating the network socket for hiscinema.com Web Server
-		HisCinemaWebServer hisCinemaWeb = new HisCinemaWebServer(InetAddress.getByName("localhost"), 40437);
+		hisCinemaWeb = new HisCinemaWebServer(InetAddress.getByName("localhost"), 40437);
 		
 		
 		//new Thread(new ConnectionHandler()).start();
 		//Creating the network socket for herCDN.com Web Server
-		HerCDNWebServer herCDNWeb = new HerCDNWebServer(InetAddress.getByName("localhost"), 40438);
+		herCDNWeb = new HerCDNWebServer(InetAddress.getByName("localhost"), 40438);
 		
 		//Eventually all of the above should look something like these
 		/*
@@ -97,13 +106,14 @@ public class ClientApplication
 		
 		}
 		
-		queryLocalDNS(fileContents.get(clientRequest-1));
+		InetAddress contentAddress = queryLocalDNS(fileContents.get(clientRequest-1));
+		
+		//File video_file = getVideoFile(contentAddress);
 
 	}
 	
 	public static ArrayList<String> connectToHisCinema() throws UnknownHostException, IOException
 	{
-		//Socket sendSocket = new Socket(InetAddress.getByName("localhost"), 40437);
 		Socket sendSocket = new Socket(InetAddress.getByName("localhost"), 40437, InetAddress.getByName("localhost"), 40430);
 		ArrayList<String> fileContents = new ArrayList<String>();
 		DataOutputStream toServer = new DataOutputStream(sendSocket.getOutputStream());	
@@ -154,7 +164,7 @@ public class ClientApplication
 		return fileContents;
 	}
 	
-	public static void queryLocalDNS(String videoURL) throws SocketException, UnknownHostException
+	public static InetAddress queryLocalDNS(String videoURL) throws SocketException, UnknownHostException
 	{
 		DatagramSocket toServerSocket = new DatagramSocket(40439,InetAddress.getByName("localhost"));
 		toServerSocket.connect(InetAddress.getByName("localhost"), 40432);
@@ -172,6 +182,7 @@ public class ClientApplication
 		}
 		
 		toServerSocket.close();
+		return clientDNS3.queryContentDNS( clientDNS2.queryCinemaDNS(msg, hisCinemaDNS.getUDPSocket().getInetAddress() , hisCinemaDNS.getUDPSocket().getPort() ) );
 	}
 }
 
