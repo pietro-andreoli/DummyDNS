@@ -27,10 +27,7 @@ public class ClientLocalDNS implements Runnable
 					try
 					{	
 						byte[] data = rcvPkt.getData();
-						for(int i = 0; i < data.length; i++)
-						{
-							System.out.println(data[i]);
-						}
+						System.out.println(new String(data));	
 					}
 					catch(Exception e)
 					{
