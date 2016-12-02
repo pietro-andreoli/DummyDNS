@@ -32,13 +32,17 @@ public class HisCinemaWebServer implements Runnable
 						{
 							while(clientMessage!=null)
 							{
-								System.out.println(clientMessage);
 								clientMessage = inFromClient.readLine();
+								System.out.println(clientMessage);
+								if(!inFromClient.ready())
+								{
+									break;
+								}
 							}
 						}
 						catch(Exception e)
 						{
-							System.out.println("bad doot");
+							System.out.println(e);
 						}
 						
 						outToClient.writeBytes("Request received, sending index.txt to IP: " + client.getInetAddress() + " on Port: " + client.getPort() + "\n");

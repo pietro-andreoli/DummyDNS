@@ -24,15 +24,20 @@ public class ClientApplication
 			ip_num++;
 		}
 		
+		//Creating the Client's sockets for communication
 		clientTCPSocket = new ServerSocket(40430, 10, InetAddress.getByName("localhost"));
 		clientToLocalDomainUDP = new DatagramSocket(40431, InetAddress.getByName("localhost"));
+		
 		//Creating the network sockets for the Local DNS
 		ClientLocalDNS clientDNS1 = new ClientLocalDNS(InetAddress.getByName("localhost"), 40432);
 		new Thread(clientDNS1).start();
+		
 		ClientLocalDNS clientDNS2 = new ClientLocalDNS(InetAddress.getByName("localhost"), 40433);
 		new Thread(clientDNS2).start();
+		
 		ClientLocalDNS clientDNS3 = new ClientLocalDNS(InetAddress.getByName("localhost"), 40434);
 		new Thread(clientDNS3).start();
+		
 		//Creating the network socket for hiscinema.com DNS
 		HisCinemaDNS hisCinemaDNS = new HisCinemaDNS(InetAddress.getByName("localhost"), 40435);
 		
@@ -66,11 +71,11 @@ public class ClientApplication
 
 		switch(clientRequest)
 		{
-		case 1: System.out.println("Client has chosen video 1"); break;
-		case 2: System.out.println("Client has chosen video 2"); break;
-		case 3: System.out.println("Client has chosen video 3"); break;
-		case 4: System.out.println("Client has chosen video 4"); break;
-		case 5: System.out.println("Client has chosen video 5"); break;
+		case 1: System.out.println("Client has chosen video 1"); queryLocalDNS("www.hiscinema.com/video1"); break;
+		case 2: System.out.println("Client has chosen video 2"); queryLocalDNS("www.hiscinema.com/video2"); break;
+		case 3: System.out.println("Client has chosen video 3"); queryLocalDNS("www.hiscinema.com/video3"); break;
+		case 4: System.out.println("Client has chosen video 4"); queryLocalDNS("www.hiscinema.com/video4"); break;
+		case 5: System.out.println("Client has chosen video 5"); queryLocalDNS("www.hiscinema.com/video5"); break;
 			default: System.out.println("That is not a valid selection"); break;
 		}
 		
@@ -109,10 +114,24 @@ public class ClientApplication
 		}
 		sendSocket.close();	
 	}
-	public void queryLocalDNS() throws SocketException, UnknownHostException{
-		DatagramSocket toServerSocket = new DatagramSocket();
-		String msg = "Hello world";
-		DatagramPacket sndPkt = new DatagramPacket(msg.getBytes(), msg.length(), clientToLocalDomainUDP.getLocalAddress(), clientToLocalDomainUDP.getLocalPort() );
+	
+	public static void queryLocalDNS(String videoURL) throws SocketException, UnknownHostException
+	{
+		DatagramSocket toServerSocket = new DatagramSocket(40439,InetAddress.getByName("localhost"));
+		toServerSocket.connect(InetAddress.getByName("localhost"), 40432);
+		String msg = videoURL;
+		DatagramPacket sndPkt = new DatagramPacket(msg.getBytes(), msg.length(), toServerSocket.getInetAddress(), toServerSocket.getPort());
+		
+		try
+		{
+		toServerSocket.send(sndPkt);
+		}
+		catch(Exception e)
+		{
+			System.out.println(e);
+		}
+		
+		toServerSocket.close();
 	}
 }
 

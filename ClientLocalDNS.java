@@ -8,10 +8,7 @@ import java.io.OutputStream;
 import java.net.*;
 
 public class ClientLocalDNS implements Runnable
-{
-	private DatagramSocket localDomainUDP1;
-	private DatagramSocket localDomainUDP2;
-	private DatagramSocket localDomainUDP3;
+{ 
 	private DatagramSocket localDomainUDP;
 	
 	public ClientLocalDNS(InetAddress addr, int port) throws Exception
@@ -24,8 +21,6 @@ public class ClientLocalDNS implements Runnable
 	{
 		try
 		{
-				while(true)
-				{
 					byte[] recvBuff = new byte[1024];
 					DatagramPacket rcvPkt = new DatagramPacket(recvBuff, 1024);
 					this.localDomainUDP.receive(rcvPkt);
@@ -43,7 +38,6 @@ public class ClientLocalDNS implements Runnable
 							{
 								System.out.println(clientMessage);
 								clientMessage = new String(rcvPkt.getData(), 0, rcvPkt.getLength());
-								
 							}
 						}
 						catch(Exception e)
@@ -78,7 +72,7 @@ public class ClientLocalDNS implements Runnable
 					}
 					//client.close();
 					
-				}
+				
 		}
 		catch(Exception e)
 		{
