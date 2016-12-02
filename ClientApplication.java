@@ -34,7 +34,7 @@ public class ClientApplication
 		}
 		
 		//Creating the Client's sockets for communication
-		clientTCPSocket = new ServerSocket(40430, 10, InetAddress.getByName("localhost"));
+		//clientTCPSocket = new ServerSocket(40430, 10, InetAddress.getByName("localhost"));
 		clientToLocalDomainUDP = new DatagramSocket(40431, InetAddress.getByName("localhost"));
 		
 		//Creating the network sockets for the Local DNS
@@ -103,7 +103,8 @@ public class ClientApplication
 	
 	public static ArrayList<String> connectToHisCinema() throws UnknownHostException, IOException
 	{
-		Socket sendSocket = new Socket(InetAddress.getByName("localhost"), 40437);
+		//Socket sendSocket = new Socket(InetAddress.getByName("localhost"), 40437);
+		Socket sendSocket = new Socket(InetAddress.getByName("localhost"), 40437, InetAddress.getByName("localhost"), 40430);
 		ArrayList<String> fileContents = new ArrayList<String>();
 		DataOutputStream toServer = new DataOutputStream(sendSocket.getOutputStream());	
 		
