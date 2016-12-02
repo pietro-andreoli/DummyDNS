@@ -27,12 +27,13 @@ public class HisCinemaWebServer implements Runnable
 						DataOutputStream outToClient = new DataOutputStream(client.getOutputStream());
 						
 						String clientMessage = "";
-						
+						String fullMessage = "";
 						try
 						{
 							while(clientMessage!=null)
 							{
 								clientMessage = inFromClient.readLine();
+								fullMessage += clientMessage;
 								System.out.println(clientMessage);
 								if(!inFromClient.ready())
 								{
@@ -47,7 +48,7 @@ public class HisCinemaWebServer implements Runnable
 						
 						outToClient.writeBytes("Request received, sending index.txt to IP: " + client.getInetAddress() + " on Port: " + client.getPort() + "\n");
 					
-						if(clientMessage.contains("GET /index.html"))
+						if(fullMessage.contains("GET /index.html"))
 						{
 							File index = new File(System.getProperty("user.dir")+"\\src\\index.txt");
 							byte[] fileByteArray = new byte[(int)index.length()];

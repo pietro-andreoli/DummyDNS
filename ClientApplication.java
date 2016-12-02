@@ -1,6 +1,15 @@
-import java.io.*;
-import java.net.*;
-import java.util.Date;
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.net.SocketException;
+import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 //This will function as the Main class for this project
@@ -60,34 +69,39 @@ public class ClientApplication
 		*/
 		
 		new Thread(hisCinemaWeb).start();
-		connectToHisCinema();
+		ArrayList<String> fileContents = connectToHisCinema();
+		while(true){
+			
+			
+			Scanner getVideo = new Scanner(System.in);
+			
+			System.out.println("Please enter a number for the video you wish to request: Please choose a number between 1 and "+fileContents.size()+"inclusively");
+			
+			int clientRequest = getVideo.nextInt();
+			getVideo.close();
+			if(!(clientRequest > fileContents.size()) && !(clientRequest < 1)){
+				System.out.println("User Chose: "+ fileContents.get(clientRequest-1));
+				break;
+			}
+			/*switch(clientRequest)
+			{
+			case 1: System.out.println("Client has chosen video 1"); queryLocalDNS("www.hiscinema.com/video1"); break;
+			case 2: System.out.println("Client has chosen video 2"); queryLocalDNS("www.hiscinema.com/video2"); break;
+			case 3: System.out.println("Client has chosen video 3"); queryLocalDNS("www.hiscinema.com/video3"); break;
+			case 4: System.out.println("Client has chosen video 4"); queryLocalDNS("www.hiscinema.com/video4"); break;
+			case 5: System.out.println("Client has chosen video 5"); queryLocalDNS("www.hiscinema.com/video5"); break;
+				default: System.out.println("That is not a valid selection"); break;
+			}*/
 		
-		Scanner getVideo = new Scanner(System.in);
-		
-		System.out.println("Please enter a number for the video you wish to request: Please choose a number between 1 and 5 inclusively");
-		
-		int clientRequest = getVideo.nextInt();
-		getVideo.close();
-
-		switch(clientRequest)
-		{
-		case 1: System.out.println("Client has chosen video 1"); queryLocalDNS("www.hiscinema.com/video1"); break;
-		case 2: System.out.println("Client has chosen video 2"); queryLocalDNS("www.hiscinema.com/video2"); break;
-		case 3: System.out.println("Client has chosen video 3"); queryLocalDNS("www.hiscinema.com/video3"); break;
-		case 4: System.out.println("Client has chosen video 4"); queryLocalDNS("www.hiscinema.com/video4"); break;
-		case 5: System.out.println("Client has chosen video 5"); queryLocalDNS("www.hiscinema.com/video5"); break;
-			default: System.out.println("That is not a valid selection"); break;
 		}
-		
-		
 		
 
 	}
 	
-	public static void connectToHisCinema() throws UnknownHostException, IOException
+	public static ArrayList<String> connectToHisCinema() throws UnknownHostException, IOException
 	{
 		Socket sendSocket = new Socket(InetAddress.getByName("localhost"), 40437);
-			
+		ArrayList<String> fileContents = new ArrayList<String>();
 		DataOutputStream toServer = new DataOutputStream(sendSocket.getOutputStream());	
 		
 		BufferedReader inFromServer = new BufferedReader(new InputStreamReader(sendSocket.getInputStream()));
@@ -101,18 +115,37 @@ public class ClientApplication
 		
 		try
 		{
+			boolean ack = false;
 			while(serverReply!=null)
 			{
-				System.out.println(serverReply);
+				
 				serverReply = inFromServer.readLine();
+				System.out.println(serverReply);
 				indexContent+=serverReply;
+				if(serverReply.contains("Request received")){
+					ack = true;
+					break;
+				}
+			}
+			if(ack == true){
+				serverReply = "";
+				while(serverReply!=null)
+				{
+					
+					serverReply = inFromServer.readLine();
+					System.out.println(":"+serverReply);
+					if(serverReply != null)
+						fileContents.add(serverReply);
+					indexContent+=serverReply;
+			}
 			}
 		}
 		catch(Exception e)
 		{
-			System.out.println("bad doot");
+			System.out.println(e);
 		}
 		sendSocket.close();	
+		return fileContents;
 	}
 	
 	public static void queryLocalDNS(String videoURL) throws SocketException, UnknownHostException
