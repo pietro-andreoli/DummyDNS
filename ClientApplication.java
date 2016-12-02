@@ -107,6 +107,7 @@ public class ClientApplication
 		}
 		
 		InetAddress contentAddress = queryLocalDNS(fileContents.get(clientRequest-1));
+		System.out.println(contentAddress);
 		
 		//File video_file = getVideoFile(contentAddress);
 
@@ -168,9 +169,16 @@ public class ClientApplication
 	{
 		DatagramSocket toServerSocket = new DatagramSocket(40439,InetAddress.getByName("localhost"));
 		toServerSocket.connect(InetAddress.getByName("localhost"), 40432);
+		
 		String msg = "(" + videoURL + ", dns.hiscinema.com, V, 86400) \n(hiscinema.com, " + toServerSocket.getInetAddress() + ", A)";
-		System.out.println("Querying DNS at IP address: " + toServerSocket.getInetAddress() + " on Port: " + toServerSocket.getPort());
+		System.out.println("Querying Local DNS at IP address: " + toServerSocket.getInetAddress() + " on Port: " + toServerSocket.getPort());
+		
+		System.out.println(msg);
+		
 		DatagramPacket sndPkt = new DatagramPacket(msg.getBytes(), msg.length(), toServerSocket.getInetAddress(), toServerSocket.getPort());
+		
+		InetAddress cinemaDNSIP = hisCinemaDNS.getUDPSocket().getLocalAddress();
+		int cinemaDNSPort = hisCinemaDNS.getUDPSocket().getLocalPort();
 		
 		try
 		{
@@ -182,7 +190,7 @@ public class ClientApplication
 		}
 		
 		toServerSocket.close();
-		return clientDNS3.queryContentDNS( clientDNS2.queryCinemaDNS(msg, hisCinemaDNS.getUDPSocket().getInetAddress() , hisCinemaDNS.getUDPSocket().getPort() ) );
+		return clientDNS3.queryContentDNS( clientDNS2.queryCinemaDNS(msg, cinemaDNSIP , cinemaDNSPort ) );
 	}
 }
 

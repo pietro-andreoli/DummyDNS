@@ -42,17 +42,12 @@ public class ClientLocalDNS implements Runnable
 	
 	public InetAddress queryCinemaDNS(String DNS_Query, InetAddress address, int port) throws SocketException, UnknownHostException
 	{
-		System.out.println("doot");
-		localDomainUDP.connect(address,port);
-		System.out.println("doot");
 		String msg = DNS_Query;
-		System.out.println("doot");
-		System.out.println(DNS_Query);
-		System.out.println("doot");
-		
 		DatagramSocket toServerSocket = new DatagramSocket(40439,InetAddress.getByName("localhost"));
-		toServerSocket.connect(InetAddress.getByName("localhost"), 40432);
-		System.out.println("Querying DNS at IP address: " + toServerSocket.getInetAddress() + " on Port: " + toServerSocket.getPort());
+		toServerSocket.connect(address, port);
+		
+		System.out.println("Querying hiscinema.com DNS at IP address: " + toServerSocket.getInetAddress() + " on Port: " + toServerSocket.getPort());
+		System.out.println(msg);
 		DatagramPacket sndPkt = new DatagramPacket(msg.getBytes(), msg.length(), toServerSocket.getInetAddress(), toServerSocket.getPort());
 		
 		try
