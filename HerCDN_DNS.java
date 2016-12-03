@@ -2,14 +2,14 @@ import java.net.*;
 
 public class HerCDN_DNS implements Runnable
 {
-	private DatagramSocket herContentDomainUDP;
+	private static DatagramSocket herContentDomainUDP;
 	
 	public HerCDN_DNS(InetAddress addr, int port) throws Exception
 	{
 		herContentDomainUDP= new DatagramSocket(port,addr);
 	}
 	
-	public DatagramSocket getUDPSocket()
+	static public DatagramSocket getUDPSocket()
 	{
 		return herContentDomainUDP;
 	}

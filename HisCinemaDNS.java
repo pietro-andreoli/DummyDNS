@@ -74,7 +74,7 @@ public class HisCinemaDNS implements Runnable
         }
         else if(recordType.contains("V"))
         {
-            outputData = ("("+dataParts[0][0]+", dns.herCDN.com, NS)\n(herCDN.com, localhost, A)").getBytes();
+            outputData = ("("+dataParts[0][0]+", dns.herCDN.com, NS)\n (herCDN.com, "+ HerCDN_DNS.getUDPSocket().getLocalAddress() + ", A)").getBytes();
         }
         return outputData;
     }
