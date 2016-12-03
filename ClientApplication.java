@@ -84,13 +84,13 @@ public class ClientApplication
 		{
 			Scanner getVideo = new Scanner(System.in);
 			
-			System.out.println("Please enter a number for the video you wish to request: Please choose a number between 1 and 5 inclusively");
+			System.out.println("Please enter a number for the video you wish to request: Please choose a number between 1 and "+fileContents.size()+" inclusively");
 			
 			clientRequest = getVideo.nextInt();
 			getVideo.close();
 			if(!(clientRequest > fileContents.size()) && !(clientRequest < 1))
 			{
-				System.out.println("User Chose: "+ fileContents.get(clientRequest-1) + "\n");
+				System.out.println("User Chose: "+ fileContents.get(clientRequest-1));
 				break;
 			}
 			
