@@ -58,15 +58,17 @@ public class ClientApplication
 		
 		//Creating the network socket for hiscinema.com DNS
 		hisCinemaDNS = new HisCinemaDNS(InetAddress.getByName("localhost"), 40435);
+		new Thread(hisCinemaDNS).start();
 		
 		//Creating the network socket for herCDN.com DNS
 		herContentDomain = new HerCDN_DNS(InetAddress.getByName("localhost"), 40436);
+		new Thread(herContentDomain).start();
 		
 		//Creating the network socket for hiscinema.com Web Server
 		hisCinemaWeb = new HisCinemaWebServer(InetAddress.getByName("localhost"), 40437);
+		new Thread(hisCinemaWeb).start();
 		
 		
-		//new Thread(new ConnectionHandler()).start();
 		//Creating the network socket for herCDN.com Web Server
 		herCDNWeb = new HerCDNWebServer(InetAddress.getByName("localhost"), 40438);
 		
@@ -171,7 +173,7 @@ public class ClientApplication
 		toServerSocket.connect(InetAddress.getByName("localhost"), 40432);
 		
 		String msg = "(" + videoURL + ", dns.hiscinema.com, V, 86400) \n(hiscinema.com, " + toServerSocket.getInetAddress() + ", A)";
-		System.out.println("Querying Local DNS at IP address: " + toServerSocket.getInetAddress() + " on Port: " + toServerSocket.getPort()+"\n");
+		System.out.println("\nClient is querying Local DNS at IP address: " + toServerSocket.getInetAddress() + " on Port: " + toServerSocket.getPort());
 		
 		System.out.println(msg+"\n");
 		
@@ -191,7 +193,8 @@ public class ClientApplication
 		}
 		
 		toServerSocket.close();
-		return clientDNS3.queryContentDNS( msg , clientDNS2.queryCinemaDNS(msg, cinemaDNSIP , cinemaDNSPort ) , contentDNSPort );
+		
+		return clientDNS3.queryContentDNS(msg , clientDNS2.queryCinemaDNS(msg,cinemaDNSIP,cinemaDNSPort) , contentDNSPort );
 	}
 }
 

@@ -46,7 +46,7 @@ public class ClientLocalDNS implements Runnable
 		DatagramSocket toServerSocket = new DatagramSocket(40439,InetAddress.getByName("localhost"));
 		toServerSocket.connect(address, port);
 		
-		System.out.println("Querying hiscinema.com DNS at IP address: " + toServerSocket.getInetAddress() + " on Port: " + toServerSocket.getPort()+"\n");
+		System.out.println("Client local DNS is querying hiscinema.com DNS at IP address: " + toServerSocket.getInetAddress() + " on Port: " + toServerSocket.getPort());
 		System.out.println(msg+"\n");
 		DatagramPacket sndPkt = new DatagramPacket(msg.getBytes(), msg.length(), toServerSocket.getInetAddress(), toServerSocket.getPort());
 		
@@ -70,7 +70,7 @@ public class ClientLocalDNS implements Runnable
 		DatagramSocket toServerSocket = new DatagramSocket(40438,InetAddress.getByName("localhost"));
 		toServerSocket.connect(InetAddress.getByName("localhost"), port);
 		
-		System.out.println("Querying herCDN.com DNS at IP address: " + toServerSocket.getInetAddress() + " on Port: " + toServerSocket.getPort() +"\n");
+		System.out.println("Client local DNS is querying herCDN.com DNS at IP address: " + toServerSocket.getInetAddress() + " on Port: " + toServerSocket.getPort());
 		System.out.println(msg+"\n");
 		DatagramPacket sndPkt = new DatagramPacket(msg.getBytes(), msg.length(), toServerSocket.getInetAddress(), toServerSocket.getPort());
 		

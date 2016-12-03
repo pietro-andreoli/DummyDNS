@@ -25,7 +25,7 @@ public class HerCDN_DNS implements Runnable
 					try
 					{	
 						byte[] data = rcvPkt.getData();
-						System.out.println(new String(data));	
+						
 					}
 					catch(Exception e)
 					{
