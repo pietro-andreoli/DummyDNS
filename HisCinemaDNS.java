@@ -21,11 +21,26 @@ public class HisCinemaDNS implements Runnable
 					byte[] receiveData = new byte[1024];
 					DatagramPacket rcvPkt = new DatagramPacket(receiveData, receiveData.length);
 					this.hisCinemaDomainUDP.receive(rcvPkt);
+					
 					try
 					{	
+						int receivePort = ClientLocalDNS.getUDPSocket().getLocalPort();
+						InetAddress receiveIP = rcvPkt.getAddress();
+						
 						byte[] data = rcvPkt.getData();
 						byte[] output = analyzeMessage(data);
-                        System.out.println(new String(output));
+                        
+                        DatagramPacket sndPkt = new DatagramPacket(output, output.length, receiveIP, receivePort);
+                        
+                        try
+                        {
+                        	System.out.println("hiscinema.com DNS is replying to Client Local DNS with the type NS request on IP address: " + rcvPkt.getAddress() + " on Port: " + receivePort);
+                        	hisCinemaDomainUDP.send(sndPkt);
+                        }
+                        catch(Exception e)
+                        {
+                        	System.out.println(e);
+                        }
 					}
 					catch(Exception e)
 					{

@@ -16,6 +16,11 @@ public class ClientLocalDNS implements Runnable
 		localDomainUDP = new DatagramSocket(port, addr);
 	}
 	
+	static public DatagramSocket getUDPSocket()
+	{
+		return localDomainUDP;
+	}
+	
 	@Override
 	public void run() 
 	{
@@ -23,7 +28,7 @@ public class ClientLocalDNS implements Runnable
 		{
 					byte[] receiveData = new byte[1024];
 					DatagramPacket rcvPkt = new DatagramPacket(receiveData, receiveData.length);
-					this.localDomainUDP.receive(rcvPkt);
+					localDomainUDP.receive(rcvPkt);
 					try
 					{	
 						byte[] data = rcvPkt.getData();
@@ -59,6 +64,27 @@ public class ClientLocalDNS implements Runnable
 			System.out.println(e);
 		}
 		
+		try
+		{
+			
+			byte[] receiveData = new byte[1024];
+			DatagramPacket rcvPkt = new DatagramPacket(receiveData, receiveData.length);
+			localDomainUDP.receive(rcvPkt);
+
+			try
+			{	
+				byte[] data = rcvPkt.getData();
+				System.out.println(new String(data));	
+			}
+			catch(Exception e)
+			{
+				System.out.println(e);
+			}		
+		}
+		catch(Exception e)
+		{
+			System.out.println(e);
+		}
 		
 		
 		return localDomainUDP.getInetAddress();

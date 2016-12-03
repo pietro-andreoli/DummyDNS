@@ -109,7 +109,6 @@ public class ClientApplication
 		}
 		
 		InetAddress contentAddress = queryLocalDNS(fileContents.get(clientRequest-1));
-		System.out.println(contentAddress);
 		
 		//File video_file = getVideoFile(contentAddress);
 
@@ -194,7 +193,11 @@ public class ClientApplication
 		
 		toServerSocket.close();
 		
-		return clientDNS3.queryContentDNS(msg , clientDNS2.queryCinemaDNS(msg,cinemaDNSIP,cinemaDNSPort) , contentDNSPort );
+		InetAddress herCDNWebAddress = clientDNS3.queryContentDNS(msg , clientDNS2.queryCinemaDNS(msg,cinemaDNSIP,cinemaDNSPort) , contentDNSPort );
+		
+		System.out.println("Replying to client with the IP Address for herCDN.com Web Server: " + herCDNWebAddress +"\n");
+		
+		return herCDNWebAddress;
 	}
 }
 
