@@ -20,12 +20,15 @@ public class HisCinemaDNS implements Runnable
 		{
 					byte[] receiveData = new byte[1024];
 					DatagramPacket rcvPkt = new DatagramPacket(receiveData, receiveData.length);
+					
 					this.hisCinemaDomainUDP.receive(rcvPkt);
+					
 					
 					try
 					{	
+						
 						byte[] data = rcvPkt.getData();
-						System.out.println(new String(data));	
+						System.out.println(new String(data) +"\n");	
 					}
 					catch(Exception e)
 					{

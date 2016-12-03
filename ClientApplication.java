@@ -58,17 +58,20 @@ public class ClientApplication
 		
 		//Creating the network socket for hiscinema.com DNS
 		hisCinemaDNS = new HisCinemaDNS(InetAddress.getByName("localhost"), 40435);
+		new Thread(hisCinemaDNS).start();
 		
 		//Creating the network socket for herCDN.com DNS
 		herContentDomain = new HerCDN_DNS(InetAddress.getByName("localhost"), 40436);
+		new Thread(herContentDomain).start();
 		
 		//Creating the network socket for hiscinema.com Web Server
 		hisCinemaWeb = new HisCinemaWebServer(InetAddress.getByName("localhost"), 40437);
-		
+		new Thread(hisCinemaWeb).start();
 		
 		//new Thread(new ConnectionHandler()).start();
 		//Creating the network socket for herCDN.com Web Server
 		herCDNWeb = new HerCDNWebServer(InetAddress.getByName("localhost"), 40438);
+		new Thread(herCDNWeb).start();
 		
 		//Eventually all of the above should look something like these
 		/*
