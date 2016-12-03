@@ -23,10 +23,8 @@ public class HisCinemaDNS implements Runnable
 					
 					this.hisCinemaDomainUDP.receive(rcvPkt);
 					
-					
 					try
 					{	
-						
 						byte[] data = rcvPkt.getData();
 						System.out.println(new String(data) +"\n");	
 					}

@@ -47,7 +47,6 @@ public class ClientLocalDNS implements Runnable
 		toServerSocket.connect(address, port);
 		
 		System.out.println("Client Local DNS is querying hiscinema.com DNS at IP address: " + toServerSocket.getInetAddress() + " on Port: " + toServerSocket.getPort()+"\n");
-		//System.out.println(msg+"\n");
 		DatagramPacket sndPkt = new DatagramPacket(msg.getBytes(), msg.length(), toServerSocket.getInetAddress(), toServerSocket.getPort());
 		
 		try
@@ -59,8 +58,6 @@ public class ClientLocalDNS implements Runnable
 			System.out.println(e);
 		}
 		
-		
-		
 		return localDomainUDP.getInetAddress();
 	}
 
@@ -71,7 +68,7 @@ public class ClientLocalDNS implements Runnable
 		toServerSocket.connect(InetAddress.getByName("localhost"), port);
 		
 		System.out.println("Client Local DNS is querying herCDN.com DNS at IP address: " + toServerSocket.getInetAddress() + " on Port: " + toServerSocket.getPort() +"\n");
-		System.out.println(msg+"\n");
+		
 		DatagramPacket sndPkt = new DatagramPacket(msg.getBytes(), msg.length(), toServerSocket.getInetAddress(), toServerSocket.getPort());
 		
 		try

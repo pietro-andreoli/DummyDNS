@@ -110,7 +110,7 @@ public class ClientApplication
 		}
 		
 		InetAddress contentAddress = queryLocalDNS(fileContents.get(clientRequest-1));
-		System.out.println(contentAddress);
+		
 		
 		//File video_file = getVideoFile(contentAddress);
 
