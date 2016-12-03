@@ -10,12 +10,17 @@ import java.net.*;
 public class ClientLocalDNS implements Runnable
 { 
 	private DatagramSocket localDNSSend;
-	private DatagramSocket localDNSReceive;
+	private static DatagramSocket localDNSReceive;
 	
 	public ClientLocalDNS(InetAddress addr, int sendPort, int receivePort) throws Exception
 	{
 		localDNSSend = new DatagramSocket(sendPort, addr);
 		localDNSReceive = new DatagramSocket(receivePort, addr);
+	}
+	
+	public static DatagramSocket getReceiveSocket()
+	{
+		return localDNSReceive;
 	}
 	
 	@Override

@@ -26,16 +26,22 @@ public class HisCinemaDNS implements Runnable
 					try
 					{	
 						byte[] data = rcvPkt.getData();
+						
 						if(data!=null)
 						{
-						System.out.println(new String(data) +"\n");	
-						String inMessage = new String(analyzeMessage(data));
+							System.out.println(new String(data) +"\n");	
+							
+							String inMessage = new String(analyzeMessage(data));
+							
+							
 						
-						if(inMessage.contains("www.hiscinema.com/video"))
-						{
-							System.out.println("DOOT");
-						}
-						
+							if(inMessage.contains("www.hiscinema.com/video"))
+							{
+								DatagramPacket sndPkt = new DatagramPacket();
+								hisCinemaDomainUDP.connect(ClientLocalDNS.getReceiveSocket().getLocalSocketAddress());
+								hisCinemaDomainUDP.send(sndPkt);
+							}
+							
 						}
 					}
 					catch(Exception e)
