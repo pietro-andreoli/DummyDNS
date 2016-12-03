@@ -33,7 +33,7 @@ public class HerCDN_DNS implements Runnable
                         
                         DatagramPacket sndPkt = new DatagramPacket(output, output.length, receiveIP, receivePort);
                         
-                        System.out.println("herCDN.com DNS is replying to Client Local DNS with the type NS request on IP address: " + sndPkt.getAddress() + " on Port: " + sndPkt.getPort());
+                        System.out.println("herCDN.com DNS is replying to Client Local DNS with the type A request on IP address: " + sndPkt.getAddress() + " on Port: " + sndPkt.getPort());
                         herContentDomainUDP.connect(sndPkt.getSocketAddress());
                         herContentDomainUDP.send(sndPkt);
                        
@@ -70,7 +70,7 @@ public class HerCDN_DNS implements Runnable
         }
         else if(recordType.contains("V"))
         {
-            outputData = ("("+dataParts[0][0]+", dns.herCDN.com, NS)\n (herCDN.com, "+ HerCDN_DNS.getUDPSocket().getLocalAddress() + ", A)").getBytes();
+            outputData = (dataParts[0][0]+" , " + HerCDNWebServer.getTCPSocket().getInetAddress() + ", A)").getBytes();
         }
         return outputData;
     }
