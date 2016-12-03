@@ -26,7 +26,17 @@ public class HisCinemaDNS implements Runnable
 					try
 					{	
 						byte[] data = rcvPkt.getData();
+						if(data!=null)
+						{
 						System.out.println(new String(data) +"\n");	
+						String inMessage = new String(analyzeMessage(data));
+						
+						if(inMessage.contains("www.hiscinema.com/video"))
+						{
+							System.out.println("DOOT");
+						}
+						
+						}
 					}
 					catch(Exception e)
 					{
@@ -60,7 +70,7 @@ public class HisCinemaDNS implements Runnable
         }
         else if(recordType.contains("V"))
         {
-            outputData = ("("+dataParts[0][0]+", dns.herCDN.com, NS)\n(herCDN.com, localhost, A)").getBytes();
+            outputData = (dataParts[0][0]+", dns.herCDN.com, NS)\n(herCDN.com, localhost, A)").getBytes();
         }
         return outputData;
     }

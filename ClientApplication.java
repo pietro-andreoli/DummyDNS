@@ -19,9 +19,7 @@ public class ClientApplication
 	//Creating the network sockets for the Client Application
 	static ServerSocket clientTCPSocket;
 	static DatagramSocket clientToLocalDomainUDP;
-	static ClientLocalDNS clientDNS1;
-	static ClientLocalDNS clientDNS2;
-	static ClientLocalDNS clientDNS3;
+	static ClientLocalDNS clientDNS;
 	static HisCinemaDNS hisCinemaDNS;
 	static HerCDN_DNS herContentDomain;
 	static HisCinemaWebServer hisCinemaWeb;
@@ -47,14 +45,8 @@ public class ClientApplication
 		clientToLocalDomainUDP = new DatagramSocket(40431, InetAddress.getByName("localhost"));
 		
 		//Creating the network sockets for the Local DNS
-		clientDNS1 = new ClientLocalDNS(InetAddress.getByName("localhost"), 40432);
-		new Thread(clientDNS1).start();
-		
-		clientDNS2 = new ClientLocalDNS(InetAddress.getByName("localhost"), 40433);
-		new Thread(clientDNS2).start();
-		
-		clientDNS3 = new ClientLocalDNS(InetAddress.getByName("localhost"), 40434);
-		new Thread(clientDNS3).start();
+		clientDNS = new ClientLocalDNS(InetAddress.getByName("localhost"), 40432, 40433);
+		new Thread(clientDNS).start();
 		
 		//Creating the network socket for hiscinema.com DNS
 		hisCinemaDNS = new HisCinemaDNS(InetAddress.getByName("localhost"), 40435);
@@ -194,7 +186,10 @@ public class ClientApplication
 		}
 		
 		toServerSocket.close();
-		return clientDNS3.queryContentDNS( msg , clientDNS2.queryCinemaDNS(msg, cinemaDNSIP , cinemaDNSPort ) , contentDNSPort );
+		
+		InetAddress herCDNIP = clientDNS.queryContentDNS( msg , clientDNS.queryCinemaDNS(msg, cinemaDNSIP , cinemaDNSPort ) , contentDNSPort );
+		
+		return herCDNIP;
 	}
 }
 
