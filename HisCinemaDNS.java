@@ -32,15 +32,10 @@ public class HisCinemaDNS implements Runnable
                         
                         DatagramPacket sndPkt = new DatagramPacket(output, output.length, receiveIP, receivePort);
                         
-                        try
-                        {
-                        	System.out.println("hiscinema.com DNS is replying to Client Local DNS with the type NS request on IP address: " + rcvPkt.getAddress() + " on Port: " + receivePort);
-                        	hisCinemaDomainUDP.send(sndPkt);
-                        }
-                        catch(Exception e)
-                        {
-                        	System.out.println(e);
-                        }
+                        System.out.println("hiscinema.com DNS is replying to Client Local DNS with the type NS request on IP address: " + sndPkt.getAddress() + " on Port: " + sndPkt.getPort());
+                        hisCinemaDomainUDP.connect(sndPkt.getSocketAddress());
+                        hisCinemaDomainUDP.send(sndPkt);
+                       
 					}
 					catch(Exception e)
 					{
@@ -74,7 +69,7 @@ public class HisCinemaDNS implements Runnable
         }
         else if(recordType.contains("V"))
         {
-            outputData = ("("+dataParts[0][0]+", dns.herCDN.com, NS)\n (herCDN.com, "+ HerCDN_DNS.getUDPSocket().getLocalAddress() + ", A)").getBytes();
+            outputData = (dataParts[0][0]+", dns.herCDN.com, NS)\n (herCDN.com, "+ HerCDN_DNS.getUDPSocket().getLocalAddress() + ", A)").getBytes();
         }
         return outputData;
     }

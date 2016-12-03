@@ -58,34 +58,16 @@ public class ClientLocalDNS implements Runnable
 		try
 		{
 		toServerSocket.send(sndPkt);
+		
+		byte[] receiveData = new byte[1024];
+		DatagramPacket rcvPkt = new DatagramPacket(receiveData, receiveData.length);
+		byte[] data = rcvPkt.getData();
+		System.out.println(new String(data));
 		}
 		catch(Exception e)
 		{
 			System.out.println(e);
 		}
-		
-		try
-		{
-			
-			byte[] receiveData = new byte[1024];
-			DatagramPacket rcvPkt = new DatagramPacket(receiveData, receiveData.length);
-			localDomainUDP.receive(rcvPkt);
-
-			try
-			{	
-				byte[] data = rcvPkt.getData();
-				System.out.println(new String(data));	
-			}
-			catch(Exception e)
-			{
-				System.out.println(e);
-			}		
-		}
-		catch(Exception e)
-		{
-			System.out.println(e);
-		}
-		
 		
 		return localDomainUDP.getInetAddress();
 	}
@@ -103,6 +85,11 @@ public class ClientLocalDNS implements Runnable
 		try
 		{
 		toServerSocket.send(sndPkt);
+		
+		byte[] receiveData = new byte[1024];
+		DatagramPacket rcvPkt = new DatagramPacket(receiveData, receiveData.length);
+		byte[] data = rcvPkt.getData();
+		System.out.println(new String(data));
 		}
 		catch(Exception e)
 		{
