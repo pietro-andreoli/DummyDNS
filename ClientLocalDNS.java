@@ -16,11 +16,6 @@ public class ClientLocalDNS implements Runnable
 		localDomainUDP = new DatagramSocket(port, addr);
 	}
 	
-	static public DatagramSocket getUDPSocket()
-	{
-		return localDomainUDP;
-	}
-	
 	@Override
 	public void run() 
 	{
@@ -28,7 +23,7 @@ public class ClientLocalDNS implements Runnable
 		{
 					byte[] receiveData = new byte[1024];
 					DatagramPacket rcvPkt = new DatagramPacket(receiveData, receiveData.length);
-					localDomainUDP.receive(rcvPkt);
+					this.localDomainUDP.receive(rcvPkt);
 					try
 					{	
 						byte[] data = rcvPkt.getData();
@@ -51,23 +46,20 @@ public class ClientLocalDNS implements Runnable
 		DatagramSocket toServerSocket = new DatagramSocket(40439,InetAddress.getByName("localhost"));
 		toServerSocket.connect(address, port);
 		
-		System.out.println("Client local DNS is querying hiscinema.com DNS at IP address: " + toServerSocket.getInetAddress() + " on Port: " + toServerSocket.getPort());
+		System.out.println("Querying hiscinema.com DNS at IP address: " + toServerSocket.getInetAddress() + " on Port: " + toServerSocket.getPort()+"\n");
 		System.out.println(msg+"\n");
 		DatagramPacket sndPkt = new DatagramPacket(msg.getBytes(), msg.length(), toServerSocket.getInetAddress(), toServerSocket.getPort());
 		
 		try
 		{
 		toServerSocket.send(sndPkt);
-		
-		byte[] receiveData = new byte[1024];
-		DatagramPacket rcvPkt = new DatagramPacket(receiveData, receiveData.length);
-		byte[] data = rcvPkt.getData();
-		System.out.println(new String(data));
 		}
 		catch(Exception e)
 		{
 			System.out.println(e);
 		}
+		
+		
 		
 		return localDomainUDP.getInetAddress();
 	}
@@ -78,18 +70,13 @@ public class ClientLocalDNS implements Runnable
 		DatagramSocket toServerSocket = new DatagramSocket(40438,InetAddress.getByName("localhost"));
 		toServerSocket.connect(InetAddress.getByName("localhost"), port);
 		
-		System.out.println("Client local DNS is querying herCDN.com DNS at IP address: " + toServerSocket.getInetAddress() + " on Port: " + toServerSocket.getPort());
+		System.out.println("Querying herCDN.com DNS at IP address: " + toServerSocket.getInetAddress() + " on Port: " + toServerSocket.getPort() +"\n");
 		System.out.println(msg+"\n");
 		DatagramPacket sndPkt = new DatagramPacket(msg.getBytes(), msg.length(), toServerSocket.getInetAddress(), toServerSocket.getPort());
 		
 		try
 		{
 		toServerSocket.send(sndPkt);
-		
-		byte[] receiveData = new byte[1024];
-		DatagramPacket rcvPkt = new DatagramPacket(receiveData, receiveData.length);
-		byte[] data = rcvPkt.getData();
-		System.out.println(new String(data));
 		}
 		catch(Exception e)
 		{

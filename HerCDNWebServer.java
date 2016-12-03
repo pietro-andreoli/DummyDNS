@@ -4,16 +4,11 @@ import java.util.Date;
 
 public class HerCDNWebServer implements Runnable
 {
-	static ServerSocket herContentWebSocket;
+	ServerSocket herContentWebSocket;
 	
 	public HerCDNWebServer(InetAddress addr, int port) throws Exception
 	{
 		herContentWebSocket= new ServerSocket(port, 100, addr);
-	}
-	
-	static public ServerSocket getTCPSocket()
-	{
-		return herContentWebSocket;
 	}
 	
 	@Override

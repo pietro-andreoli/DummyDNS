@@ -58,17 +58,15 @@ public class ClientApplication
 		
 		//Creating the network socket for hiscinema.com DNS
 		hisCinemaDNS = new HisCinemaDNS(InetAddress.getByName("localhost"), 40435);
-		new Thread(hisCinemaDNS).start();
 		
 		//Creating the network socket for herCDN.com DNS
 		herContentDomain = new HerCDN_DNS(InetAddress.getByName("localhost"), 40436);
-		new Thread(herContentDomain).start();
 		
 		//Creating the network socket for hiscinema.com Web Server
 		hisCinemaWeb = new HisCinemaWebServer(InetAddress.getByName("localhost"), 40437);
-		new Thread(hisCinemaWeb).start();
 		
 		
+		//new Thread(new ConnectionHandler()).start();
 		//Creating the network socket for herCDN.com Web Server
 		herCDNWeb = new HerCDNWebServer(InetAddress.getByName("localhost"), 40438);
 		
@@ -86,13 +84,13 @@ public class ClientApplication
 		{
 			Scanner getVideo = new Scanner(System.in);
 			
-			System.out.println("Please enter a number for the video you wish to request: Please choose a number between 1 and "+fileContents.size()+" inclusively");
+			System.out.println("Please enter a number for the video you wish to request: Please choose a number between 1 and 5 inclusively");
 			
 			clientRequest = getVideo.nextInt();
 			getVideo.close();
 			if(!(clientRequest > fileContents.size()) && !(clientRequest < 1))
 			{
-				System.out.println("User Chose: "+ fileContents.get(clientRequest-1));
+				System.out.println("User Chose: "+ fileContents.get(clientRequest-1) + "\n");
 				break;
 			}
 			
@@ -109,6 +107,7 @@ public class ClientApplication
 		}
 		
 		InetAddress contentAddress = queryLocalDNS(fileContents.get(clientRequest-1));
+		System.out.println(contentAddress);
 		
 		//File video_file = getVideoFile(contentAddress);
 
@@ -172,7 +171,7 @@ public class ClientApplication
 		toServerSocket.connect(InetAddress.getByName("localhost"), 40432);
 		
 		String msg = "(" + videoURL + ", dns.hiscinema.com, V, 86400) \n(hiscinema.com, " + toServerSocket.getInetAddress() + ", A)";
-		System.out.println("\nClient is querying Local DNS at IP address: " + toServerSocket.getInetAddress() + " on Port: " + toServerSocket.getPort());
+		System.out.println("Querying Local DNS at IP address: " + toServerSocket.getInetAddress() + " on Port: " + toServerSocket.getPort()+"\n");
 		
 		System.out.println(msg+"\n");
 		
@@ -192,12 +191,7 @@ public class ClientApplication
 		}
 		
 		toServerSocket.close();
-		
-		InetAddress herCDNWebAddress = clientDNS3.queryContentDNS(msg , clientDNS2.queryCinemaDNS(msg,cinemaDNSIP,cinemaDNSPort) , contentDNSPort );
-		
-		System.out.println("Replying to client with the IP Address for herCDN.com Web Server: " + herCDNWebAddress +"\n");
-		
-		return herCDNWebAddress;
+		return clientDNS3.queryContentDNS( msg , clientDNS2.queryCinemaDNS(msg, cinemaDNSIP , cinemaDNSPort ) , contentDNSPort );
 	}
 }
 

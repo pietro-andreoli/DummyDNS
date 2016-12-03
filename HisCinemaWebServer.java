@@ -46,7 +46,7 @@ public class HisCinemaWebServer implements Runnable
 							System.out.println(e);
 						}
 						
-						outToClient.writeBytes("Request received, sending index.txt to IP: " + client.getInetAddress() + " on Port: " + client.getPort());
+						outToClient.writeBytes("Request received, sending index.txt to IP: " + client.getInetAddress() + " on Port: " + client.getPort()+"\n");
 					
 						if(fullMessage.contains("GET /index.html"))
 						{
