@@ -10,7 +10,10 @@ public class Her_CDN_DNS {
 	static DatagramSocket herDNSSocket;
 	static InetAddress LOCAL_DNS_IP;
 	static int LOCAL_DNS_PORT;
+	static InetAddress HER_CDN_IP;
+	static int HER_CDN_PORT = 40438;
 	public Her_CDN_DNS() throws UnknownHostException, SocketException{
+		HER_CDN_IP = InetAddress.getByName("localhost");
 		THIS_PC_IP = InetAddress.getByName("localhost");
 		herDNSSocket = new DatagramSocket(THIS_PC_PORT, THIS_PC_IP);
 	}
@@ -85,7 +88,7 @@ public class Her_CDN_DNS {
         
         String recordType = dataParts[0][2];
         
-        outputData = ("(herCDN.com, localhost, A)").getBytes();
+        outputData = ("(herCDN.com,"+HER_CDN_IP+":"+HER_CDN_PORT+", A)").getBytes();
         return outputData;
     }
 }

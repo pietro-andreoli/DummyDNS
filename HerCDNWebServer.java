@@ -62,7 +62,7 @@ public class HerCDNWebServer {
 				String[] analyzedMessage = analyzeMessage(fullMessage);
 				if(analyzedMessage[0].contains("V"))
 				{
-					File videoFile = new File(System.getProperty("user.dir")+"\\src\\"+analyzedMessage[1]);
+					File videoFile = new File(System.getProperty("user.dir")+"\\src\\"+analyzedMessage[1]+".mp4");
 					byte[] fileByteArray = new byte[(int)videoFile.length()];
 					FileInputStream fis = new FileInputStream(videoFile);
 					BufferedInputStream bis = new BufferedInputStream(fis);

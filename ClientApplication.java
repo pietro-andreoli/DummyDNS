@@ -24,6 +24,8 @@ public class ClientApplication {
 	static InetAddress LOCAL_DNS_IP;
 	static int LOCAL_DNS_PORT = 40432;
 	static DatagramSocket thisPCSocket;
+	static InetAddress HER_CDN_IP;
+	static int HER_CDN_PORT;
 	//static DatagramSocket thisPCSocket;
 	public static void main(String[] args) throws UnknownHostException, IOException{
 		/*
@@ -52,26 +54,28 @@ public class ClientApplication {
 			
 		
 		}
-		InetAddress herCDNip = queryLocalDNS(fileContents.get(clientRequest-1));
-		queryHerCDN(herCDNip);
+		String[] herCDNInfo = queryLocalDNS(fileContents.get(clientRequest-1));
+		HER_CDN_IP = InetAddress.getByName(herCDNInfo[0]);
+		HER_CDN_PORT = Integer.parseInt(herCDNInfo[1]);
+		queryHerCDN();
 	}
 	
 	
 	
-	private static void queryHerCDN(InetAddress herCDNip) throws IOException 
+	private static void queryHerCDN() throws IOException 
 	{
-		Socket sendSocket = new Socket(HIS_CINEMA_WEB_SERVER_IP, HIS_CINEMA_WEB_SERVER_PORT, THIS_PC_IP, THIS_PC_PORT);
+		Socket sendSocket = new Socket(HER_CDN_IP, HER_CDN_PORT, THIS_PC_IP, THIS_PC_PORT);
 		
 		byte[] serverReply = null;
 		InputStream is = sendSocket.getInputStream();
-		FileOutputStream fos = new FileOutputStream(System.getProperty("user.dir"));
+		FileOutputStream fos = new FileOutputStream(System.getProperty("user.dir")+ "video.mp4");
 		BufferedOutputStream bos = new BufferedOutputStream(fos);
 		
 		DataOutputStream toServer = new DataOutputStream(sendSocket.getOutputStream());	
 		
 		BufferedReader inFromServer = new BufferedReader(new InputStreamReader(sendSocket.getInputStream()));
 		
-		toServer.writeBytes("(www.herCDN.com/videox, dns.herCND.com, V, 86400)\n(herCDN.com, "+herCDNip+", A)");
+		toServer.writeBytes("(www.herCDN.com/videox, dns.herCND.com, V, 86400)\n(herCDN.com, "+HER_CDN_IP+", A)");
 		toServer.flush();
 		
 		
@@ -157,7 +161,7 @@ public class ClientApplication {
 		return fileContents;
 	}
 	
-	public static InetAddress queryLocalDNS(String videoURL) throws SocketException, UnknownHostException
+	public static String[] queryLocalDNS(String videoURL) throws SocketException, UnknownHostException
 	{
 		thisPCSocket = new DatagramSocket(THIS_PC_PORT, THIS_PC_IP);
 		thisPCSocket.connect(LOCAL_DNS_IP, LOCAL_DNS_PORT);
@@ -172,13 +176,13 @@ public class ClientApplication {
 	//	InetAddress cinemaDNSIP = hisCinemaDNS.getUDPSocket().getLocalAddress();
 	//	int cinemaDNSPort = hisCinemaDNS.getUDPSocket().getLocalPort();
 	//	int contentDNSPort = herContentDomain.getUDPSocket().getLocalPort();
-		
+		byte[] rcvData = new byte[1024];
 		try
 		{
 			System.out.println("Querying the localDNS");
 			thisPCSocket.send(sndPkt);
 			thisPCSocket.disconnect();
-			byte[] rcvData = new byte[1024];
+			
 			DatagramPacket rcvPkt = new DatagramPacket(rcvData, rcvData.length);
 			System.out.println("Recieving response from localDNS");
 			thisPCSocket.receive(rcvPkt);
@@ -188,10 +192,14 @@ public class ClientApplication {
 		{
 			System.out.println(e);
 		}
+		String herCDNInfo[] = {
+				new String(rcvData).split(",")[1].split(":")[0], 
+				new String(rcvData).split(",")[1].split(":")[1]
+						};
 		
 		//InetAddress cinemaDNSip = clientDNS.queryCinemaDNS(msg, cinemaDNSIP , cinemaDNSPort );
 		//InetAddress herCDNIP = clientDNS.queryContentDNS( msg , cinemaDNSip , contentDNSPort );
 		
-		return null;
+		return herCDNInfo;
 	}
 }
