@@ -1,3 +1,4 @@
+import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -68,6 +69,7 @@ public class ClientApplication {
 		
 		byte[] serverReply = null;
 		InputStream is = sendSocket.getInputStream();
+		BufferedInputStream bis = new BufferedInputStream(is);
 		FileOutputStream fos = new FileOutputStream(System.getProperty("user.dir")+ "video.mp4");
 		BufferedOutputStream bos = new BufferedOutputStream(fos);
 		

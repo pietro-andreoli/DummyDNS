@@ -88,7 +88,8 @@ public class Her_CDN_DNS {
         
         String recordType = dataParts[0][2];
         
-        outputData = ("(herCDN.com,"+HER_CDN_IP+":"+HER_CDN_PORT+", A)").getBytes();
+        outputData = ("(herCDN.com, "+HER_CDN_IP+":"+HER_CDN_PORT+", A)").getBytes();
+        //outputData = ("(herCDN.com,"+HER_CDN_IP+", A)").getBytes();
         return outputData;
     }
 }

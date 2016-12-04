@@ -52,7 +52,7 @@ public class LocalDNS {
 					System.out.println(e);
 				}
 				String temp = new String(data);
-				System.out.println("bloblobloblob" + temp.split(", ")[2]);
+				//System.out.println("bloblobloblob" + temp.split(", ")[2]);
 				if(temp.split(", ")[2].split("\\)")[0].equals("A")){
 				//if(temp.toCharArray()[temp.length()-2] == 'A'){
 					System.out.print("idk how but it worked");
