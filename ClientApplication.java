@@ -1,7 +1,9 @@
+import java.awt.Desktop;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -59,6 +61,8 @@ public class ClientApplication {
 		HER_CDN_IP = InetAddress.getByName(herCDNInfo[0].split("/")[0]);
 		HER_CDN_PORT = Integer.parseInt(herCDNInfo[1]);
 		queryHerCDN();
+		
+		Desktop.getDesktop().open(new File(System.getProperty("user.dir")+"\\video.mp4"));
 	}
 	
 	
@@ -70,7 +74,7 @@ public class ClientApplication {
 		byte[] serverReply = null;
 		InputStream is = sendSocket.getInputStream();
 		BufferedInputStream bis = new BufferedInputStream(is);
-		FileOutputStream fos = new FileOutputStream(System.getProperty("user.dir")+ "video.mp4");
+		FileOutputStream fos = new FileOutputStream(System.getProperty("user.dir")+ "\\video.mp4");
 		BufferedOutputStream bos = new BufferedOutputStream(fos);
 		
 		DataOutputStream toServer = new DataOutputStream(sendSocket.getOutputStream());	
@@ -104,7 +108,7 @@ public class ClientApplication {
 			System.out.println(e);
 		}
 		sendSocket.close();	
-
+		fos.close();
 	}
 
 

@@ -10,7 +10,8 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class HisCinemaWebServer {
+public class HisCinemaWebServer 
+{
 	static ServerSocket hisCinemaWebSocket;
 	static InetAddress THIS_PC_IP;
 	static int THIS_PC_PORT = 40437;
@@ -19,24 +20,29 @@ public class HisCinemaWebServer {
 	/*
 	 * CHANGE IP HERE
 	 */
-	public HisCinemaWebServer() throws IOException{
+	
+	public HisCinemaWebServer() throws IOException
+	{
 		THIS_PC_IP = InetAddress.getByName("127.0.0.1");
 		hisCinemaWebSocket = new ServerSocket(THIS_PC_PORT, 100, THIS_PC_IP);
 	}
-	public static void main(String[] args) throws IOException{
+	
+	public static void main(String[] args) throws IOException
+	{
 		HisCinemaWebServer hisCinemaServer = new HisCinemaWebServer();
 		waitForQuery();
 	}
-	public static void waitForQuery() throws IOException{
-		while(true){
+	
+	public static void waitForQuery() throws IOException
+	{
+		while(true)
+		{
 			Socket receivingSocket = hisCinemaWebSocket.accept();
 			try
 			{	
 				BufferedReader inFromClient = new BufferedReader(new InputStreamReader(receivingSocket.getInputStream()));
 				
 				DataOutputStream outToClient = new DataOutputStream(receivingSocket.getOutputStream());
-				
-			
 				
 				String clientMessage = "";
 				String fullMessage = "";
