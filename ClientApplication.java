@@ -5,74 +5,30 @@ import java.io.InputStreamReader;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-//This will function as the Main class for this project
-public class ClientApplication
-{
+public class ClientApplication {
 	static String indexContent = "";
-	//Creating the network sockets for the Client Application
-	static ServerSocket clientTCPSocket;
-	static DatagramSocket clientToLocalDomainUDP;
-	static ClientLocalDNS clientDNS;
-	static HisCinemaDNS hisCinemaDNS;
-	static HerCDN_DNS herContentDomain;
-	static HisCinemaWebServer hisCinemaWeb;
-	static HerCDNWebServer herCDNWeb;
-	
-	
-	public static void main(String[] args) throws Exception
-	{
-		InetAddress[] ip_list = new InetAddress[4];
-		Scanner ip_get = new Scanner(System.in);
-		int ip_num=1;
-		
-		//While loop to gather the IP's to be initialized
-		while(ip_num < 5)
-		{
-			System.out.println("Enter IP "+ip_num);
-			ip_list[ip_num-1] = InetAddress.getByName(ip_get.nextLine());
-			ip_num++;
-		}
-		
-		//Creating the Client's sockets for communication
-		//clientTCPSocket = new ServerSocket(40430, 10, InetAddress.getByName("localhost"));
-		clientToLocalDomainUDP = new DatagramSocket(40431, InetAddress.getByName("localhost"));
-		
-		//Creating the network sockets for the Local DNS
-		clientDNS = new ClientLocalDNS(InetAddress.getByName("localhost"), 40432, 40433);
-		new Thread(clientDNS).start();
-		
-		//Creating the network socket for hiscinema.com DNS
-		hisCinemaDNS = new HisCinemaDNS(InetAddress.getByName("localhost"), 40435);
-		new Thread(hisCinemaDNS).start();
-		
-		//Creating the network socket for herCDN.com DNS
-		herContentDomain = new HerCDN_DNS(InetAddress.getByName("localhost"), 40436);
-		new Thread(herContentDomain).start();
-		
-		//Creating the network socket for hiscinema.com Web Server
-		hisCinemaWeb = new HisCinemaWebServer(InetAddress.getByName("localhost"), 40437);
-		new Thread(hisCinemaWeb).start();
-		
-		//new Thread(new ConnectionHandler()).start();
-		//Creating the network socket for herCDN.com Web Server
-		herCDNWeb = new HerCDNWebServer(InetAddress.getByName("localhost"), 40438);
-		new Thread(herCDNWeb).start();
-		
-		//Eventually all of the above should look something like these
+	static InetAddress THIS_PC_IP;
+	static int THIS_PC_PORT = 40430;
+	static InetAddress HIS_CINEMA_WEB_SERVER_IP;
+	static int HIS_CINEMA_WEB_SERVER_PORT = 40437;
+	static InetAddress LOCAL_DNS_IP;
+	static int LOCAL_DNS_PORT = 40432;
+	static DatagramSocket thisPCSocket;
+	//static DatagramSocket thisPCSocket;
+	public static void main(String[] args) throws UnknownHostException, IOException{
 		/*
-		Socket clientToHisCinemaTCP = new Socket(ip_list[0] , 40430);
-		Socket clientToHerContentTCP = new Socket(ip_list[0] , 40431);
-		DatagramSocket clientToLocalDomainUDP = new DatagramSocket(40432 , ip_list[0]);
-		*/
-		
-		new Thread(hisCinemaWeb).start();
+		 * MODIFY IPS
+		 * **************************************************
+		 */
+		THIS_PC_IP = InetAddress.getByName("localhost");
+		HIS_CINEMA_WEB_SERVER_IP =  InetAddress.getByName("localhost");
+		LOCAL_DNS_IP = InetAddress.getByName("localhost");
 		ArrayList<String> fileContents = connectToHisCinema();
 		int clientRequest;
 		while(true)
@@ -89,37 +45,25 @@ public class ClientApplication
 				break;
 			}
 			
-			/*switch(clientRequest)
-			{
-			case 1: System.out.println("Client has chosen video 1"); queryLocalDNS("www.hiscinema.com/video1"); break;
-			case 2: System.out.println("Client has chosen video 2"); queryLocalDNS("www.hiscinema.com/video2"); break;
-			case 3: System.out.println("Client has chosen video 3"); queryLocalDNS("www.hiscinema.com/video3"); break;
-			case 4: System.out.println("Client has chosen video 4"); queryLocalDNS("www.hiscinema.com/video4"); break;
-			case 5: System.out.println("Client has chosen video 5"); queryLocalDNS("www.hiscinema.com/video5"); break;
-				default: System.out.println("That is not a valid selection"); break;
-			}*/
+			
 		
 		}
-		
-		InetAddress contentAddress = queryLocalDNS(fileContents.get(clientRequest-1));
-		
-		
-		//File video_file = getVideoFile(contentAddress);
-
+		InetAddress herCDNip = queryLocalDNS(fileContents.get(clientRequest-1));
 	}
-	
 	public static ArrayList<String> connectToHisCinema() throws UnknownHostException, IOException
 	{
-		Socket sendSocket = new Socket(InetAddress.getByName("localhost"), 40437, InetAddress.getByName("localhost"), 40430);
+		Socket sendSocket = new Socket(HIS_CINEMA_WEB_SERVER_IP, HIS_CINEMA_WEB_SERVER_PORT, THIS_PC_IP, THIS_PC_PORT);
 		ArrayList<String> fileContents = new ArrayList<String>();
 		DataOutputStream toServer = new DataOutputStream(sendSocket.getOutputStream());	
 		
 		BufferedReader inFromServer = new BufferedReader(new InputStreamReader(sendSocket.getInputStream()));
 		
-		InetAddress ip = sendSocket.getInetAddress();
-		int port = sendSocket.getPort();
+		//InetAddress ip = sendSocket.getInetAddress();
+		//int port = sendSocket.getPort();
 		
-		toServer.writeBytes("GET /index.html HTTP/1.1\r\n Host: www.hiscinema.com\r\n to IP: " + ip + "\r\n on Port: " + port + "\r\n");
+		
+		toServer.writeBytes("GET /index.html HTTP/1.1\r\n Host: www.hiscinema.com\r\n to IP: " + HIS_CINEMA_WEB_SERVER_IP.getHostAddress() 
+			+ "\r\n on Port: " + HIS_CINEMA_WEB_SERVER_PORT + "\r\n\r");
 		toServer.flush();
 		String serverReply = "";
 		
@@ -162,35 +106,38 @@ public class ClientApplication
 	
 	public static InetAddress queryLocalDNS(String videoURL) throws SocketException, UnknownHostException
 	{
-		DatagramSocket toServerSocket = new DatagramSocket(40439,InetAddress.getByName("localhost"));
-		toServerSocket.connect(InetAddress.getByName("localhost"), 40432);
+		thisPCSocket = new DatagramSocket(THIS_PC_PORT, THIS_PC_IP);
+		thisPCSocket.connect(LOCAL_DNS_IP, LOCAL_DNS_PORT);
 		
-		String msg = "(" + videoURL + ", dns.hiscinema.com, V, 86400) \n(hiscinema.com, " + toServerSocket.getInetAddress() + ", A)";
-		System.out.println("Querying Local DNS at IP address: " + toServerSocket.getInetAddress() + " on Port: " + toServerSocket.getPort()+"\n");
+		String msg = "(" + videoURL + ", dns.hiscinema.com, V, 86400) \n(hiscinema.com, " + LOCAL_DNS_IP + ", A)";
+		System.out.println("Querying Local DNS at IP address: " + LOCAL_DNS_IP + " on Port: " +LOCAL_DNS_PORT+"\n");
 		
 		System.out.println(msg+"\n");
 		
-		DatagramPacket sndPkt = new DatagramPacket(msg.getBytes(), msg.length(), toServerSocket.getInetAddress(), toServerSocket.getPort());
+		DatagramPacket sndPkt = new DatagramPacket(msg.getBytes(), msg.length(), LOCAL_DNS_IP, LOCAL_DNS_PORT);
 		
-		InetAddress cinemaDNSIP = hisCinemaDNS.getUDPSocket().getLocalAddress();
-		int cinemaDNSPort = hisCinemaDNS.getUDPSocket().getLocalPort();
-		int contentDNSPort = herContentDomain.getUDPSocket().getLocalPort();
+	//	InetAddress cinemaDNSIP = hisCinemaDNS.getUDPSocket().getLocalAddress();
+	//	int cinemaDNSPort = hisCinemaDNS.getUDPSocket().getLocalPort();
+	//	int contentDNSPort = herContentDomain.getUDPSocket().getLocalPort();
 		
 		try
 		{
-		toServerSocket.send(sndPkt);
+			System.out.println("Querying the localDNS");
+			thisPCSocket.send(sndPkt);
+			byte[] rcvData = new byte[1024];
+			DatagramPacket rcvPkt = new DatagramPacket(rcvData, rcvData.length);
+			System.out.println("Recieving response from localDNS");
+			thisPCSocket.receive(rcvPkt);
+			System.out.println("Response recieved");
 		}
 		catch(Exception e)
 		{
 			System.out.println(e);
 		}
 		
-		toServerSocket.close();
+		//InetAddress cinemaDNSip = clientDNS.queryCinemaDNS(msg, cinemaDNSIP , cinemaDNSPort );
+		//InetAddress herCDNIP = clientDNS.queryContentDNS( msg , cinemaDNSip , contentDNSPort );
 		
-		InetAddress herCDNIP = clientDNS.queryContentDNS( msg , clientDNS.queryCinemaDNS(msg, cinemaDNSIP , cinemaDNSPort ) , contentDNSPort );
-		
-		return herCDNIP;
+		return null;
 	}
 }
-
-	
