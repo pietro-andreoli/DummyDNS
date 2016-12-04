@@ -13,6 +13,7 @@ import java.util.Scanner;
 
 public class ClientApplication {
 	static String indexContent = "";
+	static byte[] videoContent;
 	static InetAddress THIS_PC_IP;
 	static int THIS_PC_PORT = 40430;
 	static InetAddress HIS_CINEMA_WEB_SERVER_IP;
@@ -49,7 +50,62 @@ public class ClientApplication {
 		
 		}
 		InetAddress herCDNip = queryLocalDNS(fileContents.get(clientRequest-1));
+		byte[] videoData = queryHerCDN(herCDNip);
 	}
+	
+	
+	
+	private static byte[] queryHerCDN(InetAddress herCDNip) {
+		Socket sendSocket = new Socket(HIS_CINEMA_WEB_SERVER_IP, HIS_CINEMA_WEB_SERVER_PORT, THIS_PC_IP, THIS_PC_PORT);
+		//ArrayList<String> fileContents = new ArrayList<String>();
+		String videoContents;
+		DataOutputStream toServer = new DataOutputStream(sendSocket.getOutputStream());	
+		
+		BufferedReader inFromServer = new BufferedReader(new InputStreamReader(sendSocket.getInputStream()));
+		
+		toServer.writeBytes("(www.herCDN.com/videox, dns.herCND.com, V, 86400)\n(herCDN.com, "+herCDNip+", A)");
+		toServer.flush();
+		String serverReply = "";
+		
+		try
+		{
+			boolean ack = false;
+			while(serverReply!=null)
+			{
+				
+				serverReply = inFromServer.readLine();
+				System.out.println(serverReply);
+				indexContent+=serverReply;
+				if(serverReply.contains("Request received"))
+				{
+					ack = true;
+					break;
+				}
+			}
+			if(ack == true)
+			{
+				serverReply = "";
+				while(serverReply!=null)
+				{
+					
+					serverReply = inFromServer.readLine();
+					System.out.println(":"+serverReply);
+					if(serverReply != null)
+						fileContents.add(serverReply);
+					indexContent+=serverReply;
+				}
+			}
+		}
+		catch(Exception e)
+		{
+			System.out.println(e);
+		}
+		sendSocket.close();	
+		return fileContents;
+	}
+
+
+
 	public static ArrayList<String> connectToHisCinema() throws UnknownHostException, IOException
 	{
 		Socket sendSocket = new Socket(HIS_CINEMA_WEB_SERVER_IP, HIS_CINEMA_WEB_SERVER_PORT, THIS_PC_IP, THIS_PC_PORT);
