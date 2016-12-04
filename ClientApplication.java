@@ -1,6 +1,9 @@
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -50,49 +53,41 @@ public class ClientApplication {
 		
 		}
 		InetAddress herCDNip = queryLocalDNS(fileContents.get(clientRequest-1));
-		byte[] videoData = queryHerCDN(herCDNip);
+		queryHerCDN(herCDNip);
 	}
 	
 	
 	
-	private static byte[] queryHerCDN(InetAddress herCDNip) {
+	private static void queryHerCDN(InetAddress herCDNip) {
 		Socket sendSocket = new Socket(HIS_CINEMA_WEB_SERVER_IP, HIS_CINEMA_WEB_SERVER_PORT, THIS_PC_IP, THIS_PC_PORT);
-		//ArrayList<String> fileContents = new ArrayList<String>();
-		String videoContents;
+		
+		byte[] serverReply = null;
+		InputStream is = sendSocket.getInputStream();
+		FileOutputStream fos = new FileOutputStream(System.getProperty("user.dir"));
+		BufferedOutputStream bos = new BufferedOutputStream(fos);
+		
 		DataOutputStream toServer = new DataOutputStream(sendSocket.getOutputStream());	
 		
 		BufferedReader inFromServer = new BufferedReader(new InputStreamReader(sendSocket.getInputStream()));
 		
 		toServer.writeBytes("(www.herCDN.com/videox, dns.herCND.com, V, 86400)\n(herCDN.com, "+herCDNip+", A)");
 		toServer.flush();
-		String serverReply = "";
+		
 		
 		try
 		{
 			boolean ack = false;
 			while(serverReply!=null)
 			{
-				
-				serverReply = inFromServer.readLine();
-				System.out.println(serverReply);
-				indexContent+=serverReply;
-				if(serverReply.contains("Request received"))
-				{
 					ack = true;
-					break;
-				}
 			}
+			
 			if(ack == true)
 			{
-				serverReply = "";
+				
 				while(serverReply!=null)
 				{
-					
-					serverReply = inFromServer.readLine();
-					System.out.println(":"+serverReply);
-					if(serverReply != null)
-						fileContents.add(serverReply);
-					indexContent+=serverReply;
+					int bytesread =  is.read(serverReply, 0, serverReply.length);
 				}
 			}
 		}
@@ -101,7 +96,7 @@ public class ClientApplication {
 			System.out.println(e);
 		}
 		sendSocket.close();	
-		return fileContents;
+
 	}
 
 
