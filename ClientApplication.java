@@ -95,11 +95,11 @@ public class ClientApplication {
 			
 			if(ack == true)
 			{
-				
+				byte[] buffer = new byte[1024];
 				while(serverReply!=null)
 				{
-					int bytesRead =  is.read(serverReply, 0, serverReply.length);
-					bos.write(serverReply, 0, bytesRead);
+					int bytesRead =  bis.read(serverReply, 0, serverReply.length);
+					bos.write(buffer, 0, bytesRead);
 				}
 			}
 		}
