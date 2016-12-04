@@ -38,8 +38,9 @@ public class Her_CDN_DNS {
 			{
 				System.out.println(e);
 			}		
-			byte[] outputData = analyzeMessage(data);
-			if(new String(outputData).contains("hiscinema.com/video")){
+			
+			if(new String(data).contains("hiscinema.com/video")){
+				byte[] outputData = analyzeMessage(data);
 				replyToLocalDNS(outputData);
 			}
 		}

@@ -9,7 +9,7 @@ public class LocalDNS {
 	static int THIS_PC_PORT = 40432;	
 	static DatagramSocket localDNSSocket;
 	static InetAddress HER_CDN_IP;
-	static int HER_CDN_PORT;
+	static int HER_CDN_PORT = 40436;
 	static InetAddress HIS_CINEMA_DNS_IP;
 	static int HIS_CINEMA_DNS_PORT = 40435;
 	static InetAddress CLIENT_IP;
@@ -52,7 +52,10 @@ public class LocalDNS {
 					System.out.println(e);
 				}
 				String temp = new String(data);
-				if(temp.split(", ")[2].equals("A")){
+				System.out.println("bloblobloblob" + temp.split(", ")[2]);
+				if(temp.split(", ")[2].split("\\)")[0].equals("A")){
+				//if(temp.toCharArray()[temp.length()-2] == 'A'){
+					System.out.print("idk how but it worked");
 					replyToClient(data);
 				}
 				if(new String(data).contains("dns.hiscinema.com")){
