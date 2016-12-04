@@ -16,7 +16,9 @@ public class LocalDNS {
 	static int CLIENT_PORT;
 	static int numConnects = 0;
 	public LocalDNS() throws SocketException, UnknownHostException{
-		THIS_PC_IP = InetAddress.getByName("localhost");
+		THIS_PC_IP = InetAddress.getByName("127.0.0.1");
+		HIS_CINEMA_DNS_IP = InetAddress.getByName("127.0.0.1");
+		HER_CDN_IP = InetAddress.getByName("127.0.0.1");
 		localDNSSocket = new DatagramSocket(THIS_PC_PORT, THIS_PC_IP);
 	}
 	public static void main(String[] args) throws SocketException, UnknownHostException{
@@ -32,9 +34,11 @@ public class LocalDNS {
 				localDNSSocket.receive(rcvPkt);
 				if(numConnects == 0){
 					numConnects++;
-					CLIENT_IP = InetAddress.getByName(rcvPkt.getSocketAddress().toString().split(":")[0]);
+					System.out.println(rcvPkt.getSocketAddress().toString().split(":")[0]);
+					System.out.println(Integer.parseInt((rcvPkt.getSocketAddress().toString().split(":")[1])));
+					CLIENT_IP = InetAddress.getByName(rcvPkt.getSocketAddress().toString().split(":")[0].split("/")[1]);
 					CLIENT_PORT = Integer.parseInt((rcvPkt.getSocketAddress().toString().split(":")[1]));
-				}
+				}                        
 				String rcvData = "";
 				byte[] data = null;
 				try
@@ -65,17 +69,17 @@ public class LocalDNS {
 }
 
 	public static void queryHisCinemaDNS(byte[] data){
-		localDNSSocket.connect(HIS_CINEMA_DNS_IP, HER_CDN_PORT);
+		localDNSSocket.connect(HIS_CINEMA_DNS_IP, HIS_CINEMA_DNS_PORT);
 		
 		System.out.println("Client Local DNS is querying hiscinema DNS at IP address: " + HIS_CINEMA_DNS_IP + " on Port: " + HIS_CINEMA_DNS_PORT +"\n");
 		
-		DatagramPacket sndPkt = new DatagramPacket(data, data.length, HIS_CINEMA_DNS_IP, HER_CDN_PORT);
+		DatagramPacket sndPkt = new DatagramPacket(data, data.length, HIS_CINEMA_DNS_IP, HIS_CINEMA_DNS_PORT);
 		
 		try
 		{
 			System.out.println("Querying hiscinema dns from LocalDNS");
 			localDNSSocket.send(sndPkt);
-			
+			localDNSSocket.disconnect();
 			
 		}
 		catch(Exception e)

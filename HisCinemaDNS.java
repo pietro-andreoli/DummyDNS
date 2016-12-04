@@ -27,7 +27,7 @@ public class HisCinemaDNS {
 			System.out.println("trying to receive data from localDNS in Her_CDN_DNS");
 			hisCinemaDNSSocket.receive(rcvPkt);
 			System.out.println("Data recieved in her cdn dns");
-			LOCAL_DNS_IP = InetAddress.getByName(rcvPkt.getSocketAddress().toString().split(":")[0]);
+			LOCAL_DNS_IP = InetAddress.getByName(rcvPkt.getSocketAddress().toString().split(":")[0].split("/")[1]);
 			LOCAL_DNS_PORT = Integer.parseInt((rcvPkt.getSocketAddress().toString().split(":")[1]));
 			byte[] data = null;
 			try

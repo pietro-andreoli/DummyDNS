@@ -124,6 +124,7 @@ public class ClientApplication {
 		{
 			System.out.println("Querying the localDNS");
 			thisPCSocket.send(sndPkt);
+			thisPCSocket.disconnect();
 			byte[] rcvData = new byte[1024];
 			DatagramPacket rcvPkt = new DatagramPacket(rcvData, rcvData.length);
 			System.out.println("Recieving response from localDNS");
