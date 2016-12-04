@@ -58,7 +58,8 @@ public class ClientApplication {
 	
 	
 	
-	private static void queryHerCDN(InetAddress herCDNip) {
+	private static void queryHerCDN(InetAddress herCDNip) throws IOException 
+	{
 		Socket sendSocket = new Socket(HIS_CINEMA_WEB_SERVER_IP, HIS_CINEMA_WEB_SERVER_PORT, THIS_PC_IP, THIS_PC_PORT);
 		
 		byte[] serverReply = null;
@@ -87,7 +88,8 @@ public class ClientApplication {
 				
 				while(serverReply!=null)
 				{
-					int bytesread =  is.read(serverReply, 0, serverReply.length);
+					int bytesRead =  is.read(serverReply, 0, serverReply.length);
+					bos.write(serverReply, 0, bytesRead);
 				}
 			}
 		}
