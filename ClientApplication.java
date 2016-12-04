@@ -56,7 +56,7 @@ public class ClientApplication {
 		
 		}
 		String[] herCDNInfo = queryLocalDNS(fileContents.get(clientRequest-1));
-		HER_CDN_IP = InetAddress.getByName(herCDNInfo[0]);
+		HER_CDN_IP = InetAddress.getByName(herCDNInfo[0].split("/")[0]);
 		HER_CDN_PORT = Integer.parseInt(herCDNInfo[1]);
 		queryHerCDN();
 	}
@@ -195,8 +195,8 @@ public class ClientApplication {
 			System.out.println(e);
 		}
 		String herCDNInfo[] = {
-				new String(rcvData).split(",")[1].split(":")[0], 
-				new String(rcvData).split(",")[1].split(":")[1]
+				new String(rcvData).split(", ")[1].split(":")[0], 
+				new String(rcvData).split(", ")[1].split(":")[1]
 						};
 		
 		//InetAddress cinemaDNSip = clientDNS.queryCinemaDNS(msg, cinemaDNSIP , cinemaDNSPort );
