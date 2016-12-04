@@ -9,7 +9,7 @@ public class Her_CDN_DNS {
 	int THIS_PC_PORT = 40436;
 	static DatagramSocket herDNSSocket;
 	static InetAddress LOCAL_DNS_IP;
-	static InetAddress LOCAL_DNS_PORT;
+	static int LOCAL_DNS_PORT;
 	public Her_CDN_DNS() throws UnknownHostException, SocketException{
 		THIS_PC_IP = InetAddress.getByName("localhost");
 		herDNSSocket = new DatagramSocket(THIS_PC_PORT, THIS_PC_IP);
@@ -39,7 +39,7 @@ public class Her_CDN_DNS {
 				System.out.println(e);
 			}		
 			byte[] outputData = analyzeMessage(data);
-			if(new String(outputData).contains("dns.herCDN.com")){
+			if(new String(outputData).contains("hiscinema.com/video")){
 				replyToLocalDNS(outputData);
 			}
 		}
@@ -50,16 +50,16 @@ public class Her_CDN_DNS {
 	}
 	
 	public static void replyToLocalDNS(byte[] data){
-		herDNSSocket.connect(, HER_CDN_PORT);
+		herDNSSocket.connect(LOCAL_DNS_IP, LOCAL_DNS_PORT);
 		
-		System.out.println("Client Local DNS is querying herCDN.com DNS at IP address: " + HER_CDN_IP + " on Port: " + HER_CDN_PORT +"\n");
+		System.out.println("herCDN is replying local DNS at IP address: " + LOCAL_DNS_IP + " on Port: " + LOCAL_DNS_PORT +"\n");
 		
-		DatagramPacket sndPkt = new DatagramPacket(data, data.length, HER_CDN_IP, HER_CDN_PORT);
+		DatagramPacket sndPkt = new DatagramPacket(data, data.length, LOCAL_DNS_IP, LOCAL_DNS_PORT);
 		
 		try
 		{
-			System.out.println("Querying HERCDN from LocalDNS");
-			localDNSSocket.send(sndPkt);
+			System.out.println("replying to local dns from hercdn");
+			herDNSSocket.send(sndPkt);
 			
 			
 		}
@@ -84,14 +84,7 @@ public class Her_CDN_DNS {
         
         String recordType = dataParts[0][2];
         
-        if(recordType.contains("A"))
-        {
-            //A type
-        }
-        else if(recordType.contains("V"))
-        {
-            outputData = (dataParts[0][0]+", dns.herCDN.com, NS)\n(herCDN.com, localhost, A)").getBytes();
-        }
+        outputData = ("(herCDN.com, localhost, A)").getBytes();
         return outputData;
     }
 }
